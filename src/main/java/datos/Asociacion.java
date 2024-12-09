@@ -74,4 +74,44 @@ public class Asociacion {
     public ListaAcciones getAcciones() {
         return acciones;
     }
+
+    @Override
+public String toString() {
+    String result = "Asociacion: " + name + "\n" +
+                    "Correo: " + correo + "\n" +
+                    "Titulaciones: ";
+                    
+    if (titulaciones != null) {
+        for (int i = 0; i < titulaciones.length; i++) {
+            result += titulaciones[i];
+            if (i < titulaciones.length - 1) {
+                result += ", ";
+            }
+        }
+    }
+
+    result += "\nPresidente: ";
+    if (presidente != null) {
+        result += presidente.getAlias();
+    } else {
+        result += "Ninguno";
+    }
+
+    result += "\nSecretario: ";
+    if (secretario != null) {
+        result += secretario.getAlias();
+    } else {
+        result += "Ninguno";
+    }
+
+    result += "\nTesorero: ";
+    if (tesorero != null) {
+        result += tesorero.getAlias();
+    } else {
+        result += "Ninguno";
+    }
+
+    return result;
+}
+
 }
