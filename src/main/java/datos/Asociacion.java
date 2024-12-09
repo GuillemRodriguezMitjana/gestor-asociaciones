@@ -1,3 +1,5 @@
+package datos;
+
 public class Asociacion {
     private String name;
     private String correo;
