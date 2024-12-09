@@ -26,7 +26,7 @@ public class Asociacion {
     }
 
     public String getCorreo() {
-        return correoo;
+        return correo;
     }
 
     public void setCorreoContacto(String correo) {
