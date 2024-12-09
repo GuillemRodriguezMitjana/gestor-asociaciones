@@ -1,10 +1,14 @@
 package listas;
+
+import datos.Miembro;
+
 public class ListaMiembros {
+
     private Miembro[] lista;
     private int nElem;
 
     public ListaMiembros() {
-        lista = new Miembro[100]; 
+        lista = new Miembro[100];
         nElem = 0;
     }
 
@@ -26,4 +30,5 @@ public class ListaMiembros {
     public int getNElem() {
         return nElem;
     }
+
 }
