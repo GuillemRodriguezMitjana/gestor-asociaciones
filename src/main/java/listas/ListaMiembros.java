@@ -1,4 +1,4 @@
-package datos;
+package listas;
 public class ListaMiembros {
     private Miembro[] lista;
     private int nElem;
