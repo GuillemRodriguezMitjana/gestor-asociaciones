@@ -1,4 +1,5 @@
-package datos;
+package accion;
+
 public class Charla extends Accion {
     // Atributos específicos de Charla
     private String fechaCharla; // Fecha en la que se realizará la charla
