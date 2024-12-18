@@ -1,20 +1,23 @@
 package datos;
 
+import listas.ListaAsociaciones;
+
 public abstract class Miembro {
-    private String alias; 
-    private String correo; 
-    private String fechaAlta; 
-    private String fechaBaja; 
+
+    private String alias;
+    private String correo;
+    private String fechaAlta;
+    private String fechaBaja;
     private ListaAsociaciones asociaciones;
 
     public Miembro(String alias, String correo) {
         this.alias = alias;
         this.correo = correo;
-        this.fechaAlta = null; 
-        this.fechaBaja = null; 
+        this.fechaAlta = null;
+        this.fechaBaja = null;
         this.asociaciones = new ListaAsociaciones();
     }
-    
+
     // Getters
     public String getAlias() {
         return alias;
@@ -62,11 +65,13 @@ public abstract class Miembro {
         if (asociaciones.getNElem() >= 3) {
             throw new Exception("El miembro no puede pertenecer a más de 3 asociaciones.");
         }
-        asociaciones.agregar(asociacion);
+        asociaciones.agregarAsociacion(asociacion);
     }
-    
+
     @Override
     public String toString() {
-        return "Miembro [Alias: " + alias + ", Correo: " + correo + ", Fecha Alta: " + fechaAlta + ", Fecha Baja: " + fechaBaja + "]";
+        return "Miembro [Alias: " + alias + ", Correo: " + correo + ", Fecha Alta: " + fechaAlta + ", Fecha Baja: "
+                + fechaBaja + "]";
     }
+
 }
