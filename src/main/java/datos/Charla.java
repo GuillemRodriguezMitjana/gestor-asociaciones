@@ -1,5 +1,6 @@
 package datos;
 
+import excepciones.ExcepcionMaximoValoraciones;
 import listas.ListaMiembros;
 
 public class Charla extends Accion {
@@ -51,11 +52,13 @@ public class Charla extends Accion {
     }
 
     // Agregar una valoración (entre 0 y 10)
-    public void agregarValoracion(int valoracion) {
+    public void agregarValoracion(int valoracion) throws ExcepcionMaximoValoraciones {
         if (valoracion >= 0 && valoracion <= 10) {
             if (numValoraciones < valoraciones.length) {
                 valoraciones[numValoraciones] = valoracion;
                 numValoraciones++;
+            } else {
+                throw new ExcepcionMaximoValoraciones("Maximo valoraciones");
             }
         } else {
             System.out.println("La valoración debe estar entre 0 y 10.");
