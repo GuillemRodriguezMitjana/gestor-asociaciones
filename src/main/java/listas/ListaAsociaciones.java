@@ -3,6 +3,7 @@ package listas;
 import datos.Asociacion;
 
 public class ListaAsociaciones {
+
     private Asociacion[] lista;
     private int nElem;
 
@@ -16,14 +17,14 @@ public class ListaAsociaciones {
             lista[nElem++] = asociacion;
             return true;
         }
-        return false; 
+        return false;
     }
 
     public Asociacion obtenerAsociacion(int index) {
         if (index >= 0 && index < nElem) {
             return lista[index];
         }
-        return null; 
+        return null;
     }
 
     public Asociacion buscarAsociacion(String nombre) {
@@ -32,20 +33,20 @@ public class ListaAsociaciones {
                 return lista[i];
             }
         }
-        return null; 
+        return null;
     }
 
-    
     public int getNElem() {
         return nElem;
     }
 
     @Override
     public String toString() {
-    String result = "Lista de Asociaciones:\n"; 
-    for (int i = 0; i < nElem; i++) {
-        result += "- " + lista[i].getName() + "\n"; 
+        String result = "Lista de Asociaciones:\n";
+        for (int i = 0; i < nElem; i++) {
+            result += "- " + lista[i].getName() + "\n";
+        }
+        return result;
     }
-    return result; 
-}
+
 }

@@ -1,6 +1,9 @@
 package listas;
 
+import datos.Accion;
+
 public class ListaAcciones {
+
     private Accion[] lista;
     private int nElem;
 
@@ -27,4 +30,5 @@ public class ListaAcciones {
     public int getNElem() {
         return nElem;
     }
+
 }

@@ -1,8 +1,8 @@
 package datos;
 
 public class Profesor extends Miembro {
-    
-    private String departamento; 
+
+    private String departamento;
     private int numDespacho;
 
     public Profesor(String alias, String correo, String fechaAlta, String departamento, int numDespacho) {
@@ -33,4 +33,5 @@ public class Profesor extends Miembro {
         return "Profesor [Alias: " + getAlias() + ", Correo: " + getCorreo() + ", Fecha Alta: " + getFechaAlta()
                 + ", Departamento: " + departamento + ", Despacho: " + numDespacho + "]";
     }
+
 }

@@ -1,33 +1,39 @@
-package accion;
+package datos;
+
+import excepciones.ExcepcionMaximoValoraciones;
+import listas.ListaMiembros;
 
 public class Charla extends Accion {
+
     // Atributos específicos de Charla
     private String fechaCharla; // Fecha en la que se realizará la charla
-    private List<Miembro> miembrosImpartidores; // Lista de miembros que imparten la charla (máximo 3)
+    private ListaMiembros miembrosImpartidores; // Lista de miembros que imparten la charla (máximo 3)
     private int numAsistentes; // Número de asistentes a la charla
-    private List<Integer> valoraciones; // Lista de valoraciones de los asistentes (escala [0-10])
+    private int[] valoraciones; // Lista de valoraciones de los asistentes (escala [0-10])
+    private int numValoraciones;
 
     // Constructor
     public Charla(String codigo, String titulo, Miembro responsable, String fechaCharla) {
         super(codigo, titulo, responsable);
         this.fechaCharla = fechaCharla;
-        this.miembrosImpartidores = new ArrayList<>();
-        this.valoraciones = new ArrayList<>();
+        this.miembrosImpartidores = new ListaMiembros();
         this.numAsistentes = 0;
+        this.valoraciones = new int[50];
+        this.numValoraciones = 0;
     }
 
     // Métodos específicos de Charla
 
     // Agregar un miembro impartidor (máximo 3)
     public void agregarImpartidor(Miembro miembro) {
-        if (miembrosImpartidores.size() < 3) {
-            miembrosImpartidores.add(miembro);
+        if (miembrosImpartidores.getNElem() < 3) {
+            miembrosImpartidores.agregarMiembro(miembro);
         } else {
             System.out.println("No se pueden agregar más de 3 miembros como impartidores.");
         }
     }
 
-    public List<Miembro> getMiembrosImpartidores() {
+    public ListaMiembros getMiembrosImpartidores() {
         return miembrosImpartidores;
     }
 
@@ -40,26 +46,37 @@ public class Charla extends Accion {
         return numAsistentes;
     }
 
+    // Obtener la lista de valoraciones
+    public int[] getValoraciones() {
+        return valoraciones;
+    }
+
     // Agregar una valoración (entre 0 y 10)
-    public void agregarValoracion(int valoracion) {
+    public void agregarValoracion(int valoracion) throws ExcepcionMaximoValoraciones {
         if (valoracion >= 0 && valoracion <= 10) {
-            valoraciones.add(valoracion);
+            if (numValoraciones < valoraciones.length) {
+                valoraciones[numValoraciones] = valoracion;
+                numValoraciones++;
+            } else {
+                throw new ExcepcionMaximoValoraciones("Maximo valoraciones");
+            }
         } else {
             System.out.println("La valoración debe estar entre 0 y 10.");
         }
     }
 
-    // Obtener la lista de valoraciones
-    public List<Integer> getValoraciones() {
-        return valoraciones;
-    }
-
     // Calcular la media de las valoraciones
     public double obtenerPromedioValoraciones() {
-        if (valoraciones.isEmpty()) {
+        if (numValoraciones == 0) {
             return 0.0;
         }
-        return valoraciones.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+
+        int suma = 0;
+        for (int i = 0; i < numValoraciones; i++) {
+            suma += valoraciones[i];
+        }
+
+        return (double) suma / numValoraciones;
     }
 
     // Getters y setters

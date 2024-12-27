@@ -1,6 +1,9 @@
 package datos;
 
+import listas.*;
+
 public class Asociacion {
+
     private String name;
     private String correo;
     private String[] titulaciones; // Array para las titulaciones
@@ -15,7 +18,7 @@ public class Asociacion {
         this.correo = correo;
         this.titulaciones = titulaciones;
         this.miembros = new ListaMiembros();
-        this.acciones = new ListaAcciones();    
+        this.acciones = new ListaAcciones();
     }
 
     // Métodos getters y setters
@@ -76,42 +79,42 @@ public class Asociacion {
     }
 
     @Override
-public String toString() {
-    String result = "Asociacion: " + name + "\n" +
-                    "Correo: " + correo + "\n" +
-                    "Titulaciones: ";
-                    
-    if (titulaciones != null) {
-        for (int i = 0; i < titulaciones.length; i++) {
-            result += titulaciones[i];
-            if (i < titulaciones.length - 1) {
-                result += ", ";
+    public String toString() {
+        String result = "Asociacion: " + name + "\n" +
+                "Correo: " + correo + "\n" +
+                "Titulaciones: ";
+
+        if (titulaciones != null) {
+            for (int i = 0; i < titulaciones.length; i++) {
+                result += titulaciones[i];
+                if (i < titulaciones.length - 1) {
+                    result += ", ";
+                }
             }
         }
-    }
 
-    result += "\nPresidente: ";
-    if (presidente != null) {
-        result += presidente.getAlias();
-    } else {
-        result += "Ninguno";
-    }
+        result += "\nPresidente: ";
+        if (presidente != null) {
+            result += presidente.getAlias();
+        } else {
+            result += "Ninguno";
+        }
 
-    result += "\nSecretario: ";
-    if (secretario != null) {
-        result += secretario.getAlias();
-    } else {
-        result += "Ninguno";
-    }
+        result += "\nSecretario: ";
+        if (secretario != null) {
+            result += secretario.getAlias();
+        } else {
+            result += "Ninguno";
+        }
 
-    result += "\nTesorero: ";
-    if (tesorero != null) {
-        result += tesorero.getAlias();
-    } else {
-        result += "Ninguno";
-    }
+        result += "\nTesorero: ";
+        if (tesorero != null) {
+            result += tesorero.getAlias();
+        } else {
+            result += "Ninguno";
+        }
 
-    return result;
-}
+        return result;
+    }
 
 }
