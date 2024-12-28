@@ -6,14 +6,14 @@ import listas.ListaMiembros;
 public class Charla extends Accion {
 
     // Atributos específicos de Charla
-    private String fechaCharla; // Fecha en la que se realizará la charla
+    private Fecha fechaCharla; // Fecha en la que se realizará la charla
     private ListaMiembros miembrosImpartidores; // Lista de miembros que imparten la charla (máximo 3)
     private int numAsistentes; // Número de asistentes a la charla
     private int[] valoraciones; // Lista de valoraciones de los asistentes (escala [0-10])
     private int numValoraciones;
 
     // Constructor
-    public Charla(String codigo, String titulo, Miembro responsable, String fechaCharla) {
+    public Charla(String codigo, String titulo, Miembro responsable, Fecha fechaCharla) {
         super(codigo, titulo, responsable);
         this.fechaCharla = fechaCharla;
         this.miembrosImpartidores = new ListaMiembros();
@@ -53,7 +53,7 @@ public class Charla extends Accion {
 
     // Agregar una valoración (entre 0 y 10)
     public void agregarValoracion(int valoracion) throws ExcepcionMaximoValoraciones {
-        if (valoracion >= 0 && valoracion <= 10) {
+        if (valoracion >= 0 && valoracion <= 10)    {
             if (numValoraciones < valoraciones.length) {
                 valoraciones[numValoraciones] = valoracion;
                 numValoraciones++;
@@ -80,20 +80,22 @@ public class Charla extends Accion {
     }
 
     // Getters y setters
-    public String getFechaCharla() {
+    public Fecha getFechaCharla() {
         return fechaCharla;
     }
 
-    public void setFechaCharla(String fechaCharla) {
+    public void setFechaCharla(Fecha fechaCharla) {
         this.fechaCharla = fechaCharla;
     }
 
     @Override
     public String toString() {
-        return "Charla [codigo=" + getCodigo() + ", titulo=" + getTitulo() +
-                ", fechaCharla=" + fechaCharla +
-                ", impartidores=" + miembrosImpartidores +
-                ", asistentes=" + numAsistentes +
-                ", promedioValoraciones=" + obtenerPromedioValoraciones() + "]";
+        return "Charla [codigo=" + getCodigo() + 
+               ", titulo=" + getTitulo() + 
+               ", fechaCharla=" + fechaCharla + 
+               ", impartidores=" + miembrosImpartidores.toString() +
+               ", asistentes=" + numAsistentes +
+               ", promedioValoraciones=" + obtenerPromedioValoraciones() + "]";
     }
+    
 }
