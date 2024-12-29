@@ -102,9 +102,6 @@ public class ListaAcciones {
         }
     }
     
-    
-    
-    
     public void EscriureFitxer() {
         try {
             BufferedWriter f = new BufferedWriter(new FileWriter("acciones.txt"));
@@ -142,6 +139,15 @@ public class ListaAcciones {
         } catch (IOException e) {
             System.out.println("S'ha produit un error en els arxius.");
         }
+    }
+
+    public Accion buscarAccionPorCodigo(String codigo) {
+        for (int i = 0; i < nElem; i++) {
+            if (lista[i].getCodigo().equals(codigo)) {
+                return lista[i];
+            }
+        }
+        return null;
     }
 
     @Override

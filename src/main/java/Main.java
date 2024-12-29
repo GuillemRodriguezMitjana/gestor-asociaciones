@@ -6,6 +6,7 @@ import datos.Asociacion;
 import datos.Charla;
 import datos.Miembro;
 import datos.Profesor;
+import excepciones.ExcepcionMaximoValoraciones;
 import listas.ListaMiembros;
 import listas.ListaAcciones;
 import listas.ListaAsociaciones;
@@ -41,7 +42,7 @@ public class Main {
                     opcio2(lista_associaciones);
                     break;
                 case 3:
-                 opcio3();
+                    opcio3(lista_associaciones);
                 break;
                 case 4:
                     opcio4();
@@ -56,7 +57,7 @@ public class Main {
                     opcio7();
                     break;
                 case 8:
-                    opcio8();
+                    opcio8(lista_associaciones);
                     break;
                 case 9:
                     opcio9();
@@ -68,13 +69,21 @@ public class Main {
                     opcio11();
                     break;
                 case 12:
-                    opcio12();
+                    opcio12(lista_associaciones);
                     break;
                 case 13:
                     opcio13();
                     break;
                 case 14:
-                    opcio14();
+                    System.out.print("Introdueix el codi de la xerrada a valorar: ");
+                    String codiXerrada = teclat.nextLine();
+                    Charla charla = (Charla) lista_acciones.buscarAccionPorCodigo(codiXerrada);
+
+                    if (charla != null) {
+                        opcio14(charla);
+                    } else {
+                        System.out.println("No s'ha trobat cap xerrada amb aquest codi.");
+                    }
                     break;
                 case 15:
                     opcio15();
@@ -147,8 +156,40 @@ public static void opcio2(ListaAsociaciones listaAsociaciones)
         } else {
             System.out.println("Associació no trobada.");
         }
+}
+
+public static void opcio3(ListaAsociaciones listaAsociaciones) 
+{
+    System.out.println("Selecciona el tipus de membre actiu a mostrar:");
+    System.out.println("1. Professors");
+    System.out.println("2. Alumnes");
+    System.out.println("3. Les dues");
+    System.out.print("Introduce una opción (1-3): ");
+    int filtro = Integer.parseInt(teclat.nextLine());
+
+    boolean miembrosEncontrados = false;
+
+    for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
+        Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+        ListaMiembros miembros = asociacion.getMiembros();
+
+        for (int j = 0; j < miembros.getNElem(); j++) {
+            Miembro miembro = miembros.obtenerMiembro(j);
+
+            if (miembro.estaActivo() && 
+                ((filtro == 1 && miembro instanceof Profesor) ||
+                 (filtro == 2 && miembro instanceof Alumno) ||
+                 (filtro == 3))) {
+                System.out.println(miembro);
+                miembrosEncontrados = true;
+            }
+        }
     }
-public static void opcio3() {}
+
+    if (!miembrosEncontrados) {
+        System.out.println("No s'han trobat membres actius.");
+    }
+}
 
 public static void opcio4() {}
 
@@ -193,13 +234,81 @@ public static void opcio6(ListaAcciones listaAcciones) {
     }
 }
 
-
-
-
-
 public static void opcio7() {}
 
-public static void opcio8() {}
+public static void opcio8 (ListaAsociaciones listaAsociaciones) {
+    System.out.print("Introdueix el nom de l'associació: ");
+    String nombreAsociacion = teclat.nextLine();
+
+    Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
+    if (asociacion == null) {
+        System.out.println("Associació no trobada.");
+        return;
+    }
+
+    System.out.print("Introdueix l'alias del membre: ");
+    String alias = teclat.nextLine();
+
+    Miembro miembro = null;
+    int i = 0;
+    while (miembro == null && i < listaAsociaciones.getNElem()) {
+        Asociacion assoc = listaAsociaciones.obtenerAsociacion(i);
+        ListaMiembros miembros = assoc.getMiembros();
+
+        int j = 0;
+        while (miembro == null && j < miembros.getNElem()) {
+            Miembro m = miembros.obtenerMiembro(j);
+            if (m.getAlias().equals(alias)) {
+                miembro = m;
+            }
+            j++;
+        }
+        i++;
+    }
+
+    if (miembro == null) {
+        System.out.print("Introdueix el correu electrònic del nou membre: ");
+        String correo = teclat.nextLine();
+
+        System.out.println("Selecciona el tipus de membre:");
+        System.out.println("1. Professor");
+        System.out.println("2. Alumne");
+        System.out.print("Introdueix una opció (1-2): ");
+        int tipoMiembro = Integer.parseInt(teclat.nextLine());
+
+        if (tipoMiembro == 1) {
+            System.out.print("Introdueix la data d'alta: ");
+            String fechaAlta = teclat.nextLine();
+            System.out.print("Introdueix el departament: ");
+            String departamento = teclat.nextLine();
+            System.out.print("Introdueix el número de despatx: ");
+            int numDespacho = Integer.parseInt(teclat.nextLine());
+
+            miembro = new Profesor(alias, correo, fechaAlta, departamento, numDespacho);
+        } else if (tipoMiembro == 2) {
+            System.out.print("Introdueix la data d'alta: ");
+            String fechaAlta = teclat.nextLine();
+            System.out.print("Introdueix la titulació: ");
+            String titulacion = teclat.nextLine();
+
+            miembro = new Alumno(alias, correo, fechaAlta, titulacion);
+        } else {
+            System.out.println("Tipus de membre no vàlid.");
+            return;
+        }
+
+        asociacion.getMiembros().agregarMiembro(miembro);
+        System.out.println("Nou membre creat i afegit a l'associació.");
+    } else {
+        try {
+            miembro.agregarAsociacion(asociacion);
+            asociacion.getMiembros().agregarMiembro(miembro);
+            System.out.println("El membre ha estat donat d'alta correctament a l'associació.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+}
 
 public static void opcio9() {}
 
@@ -207,11 +316,58 @@ public static void opcio10() {}
 
 public static void opcio11() {}
 
-public static void opcio12() {}
+public static void opcio12(ListaAsociaciones listaAsociaciones) 
+{
+    Miembro personaMasActiva = null;
+    int maxAsociaciones = 0;
+    String fechaMasAntigua = null;
+
+    for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
+        Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+        ListaMiembros miembros = asociacion.getMiembros();
+
+        for (int j = 0; j < miembros.getNElem(); j++) {
+            Miembro miembro = miembros.obtenerMiembro(j);
+            int numAsociaciones = miembro.getAsociaciones().getNElem();
+            String fechaAlta = miembro.getFechaAlta();
+
+            if (numAsociaciones > maxAsociaciones ||
+                (numAsociaciones == maxAsociaciones && (fechaMasAntigua == null || fechaAlta.compareTo(fechaMasAntigua) < 0))) {
+
+                personaMasActiva = miembro;
+                maxAsociaciones = numAsociaciones;
+                fechaMasAntigua = fechaAlta;
+            }
+        }
+    }
+
+    if (personaMasActiva != null) {
+        System.out.println("La persona més activa és: " + personaMasActiva);
+    } else {
+        System.out.println("No s'ha trobat cap persona activa.");
+    }
+}
+
 
 public static void opcio13() {}
 
-public static void opcio14() {}
+public static void opcio14(Charla charla) {
+    System.out.print("Introdueix la teva valoració de la xerrada (0 a 10): ");
+    int valoracio = Integer.parseInt(teclat.nextLine());
+
+    if (valoracio < 0 || valoracio > 10) {
+        System.out.println("Valoració no vàlida. Ha de ser un valor entre 0 i 10.");
+        return;
+    }
+
+    try {
+        charla.agregarValoracion(valoracio);
+        System.out.println("Gràcies per valorar la xerrada! La valoració mitjana actual és: " + charla.obtenerPromedioValoraciones());
+    } catch (ExcepcionMaximoValoraciones e) {
+        System.out.println("No es poden afegir més valoracions: " + e.getMessage());
+    }
+}
+
 
 public static void opcio15() {}
 
