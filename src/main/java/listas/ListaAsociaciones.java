@@ -1,13 +1,23 @@
 package listas;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import datos.Asociacion;
 
-public class ListaAsociaciones {
+public class ListaAsociaciones implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     private Asociacion[] lista;
     private int nElem;
 
-    public ListaAsociaciones() {
+    public ListaAsociaciones(int dim) {
         lista = new Asociacion[100]; // Tamaño fijo inicial
         nElem = 0;
     }
@@ -39,14 +49,19 @@ public class ListaAsociaciones {
     public int getNElem() {
         return nElem;
     }
-
+    
     @Override
-    public String toString() {
-        String result = "Lista de Asociaciones:\n";
-        for (int i = 0; i < nElem; i++) {
-            result += "- " + lista[i].getName() + "\n";
+public String toString() {
+    String resultado = "[";
+    for (int i = 0; i < nElem; i++) {
+        resultado += lista[i].getName();
+        if (i < nElem - 1) {
+            resultado += ", ";
         }
-        return result;
     }
+    resultado += "]";
+    return resultado;
+}
+
 
 }
