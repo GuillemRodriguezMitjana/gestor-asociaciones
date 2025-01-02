@@ -8,7 +8,7 @@ public class ListaMiembros {
     private int nElem;
 
     public ListaMiembros() {
-        lista = new Miembro[100];
+        lista = new Miembro[100];  // Capacidad inicial de 100 miembros
         nElem = 0;
     }
 
@@ -27,8 +27,16 @@ public class ListaMiembros {
         return null;
     }
 
+    public Miembro buscarMiembro(String alias) {
+        for (int i = 0; i < nElem; i++) {
+            if (lista[i].getAlias().equalsIgnoreCase(alias)) {
+                return lista[i];
+            }
+        }
+        return null;
+    }
+
     public int getNElem() {
         return nElem;
     }
-
 }
