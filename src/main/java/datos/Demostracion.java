@@ -1,16 +1,17 @@
 package datos;
 
-import java.util.Date;
+
+
 
 public class Demostracion extends Accion {
 
-    private Date fechaDiseño;
+    private Fecha fechaDiseño;
     private boolean activa;
     private int vecesOfrecida;
     private double costeMateriales;
 
     // Constructor
-    public Demostracion(String codigo, String titulo, Miembro responsable, Date fechaDiseño, double costeMateriales) {
+    public Demostracion(String codigo, String titulo, Miembro responsable, Fecha fechaDiseño, double costeMateriales) {
         super(codigo, titulo, responsable);
         this.fechaDiseño = fechaDiseño;
         this.activa = true;
@@ -36,11 +37,11 @@ public class Demostracion extends Accion {
     }
 
     // Getters y setters
-    public Date getFechaDiseño() {
+    public Fecha getFechaDiseño() {
         return fechaDiseño;
     }
 
-    public void setFechaDiseño(Date fechaDiseño) {
+    public void setFechaDiseño(Fecha fechaDiseño) {
         this.fechaDiseño = fechaDiseño;
     }
 
