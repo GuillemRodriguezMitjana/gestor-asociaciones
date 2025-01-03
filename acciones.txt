@@ -1,3 +1,6 @@
 Charla;CHA001;Introducción a Java;15/01/2024;Juan Perez;3;8,9,10
 Demostracion;DEM001;Demostración de Robótica;10/02/2023;true;5;200.50
 Charla;CHA003;Bases de Datos;20/01/2024;Ana Lopez;2;7,8
+Demostracion;DEM002;Simulación Química;25/03/2023;false;3;150.75
+Demostracion;DEM003;Simulación Test ;26/03/2023;false;4;200.75
+

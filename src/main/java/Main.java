@@ -4,6 +4,7 @@ import datos.Accion;
 import datos.Alumno;
 import datos.Asociacion;
 import datos.Charla;
+import datos.Demostracion;
 import datos.Miembro;
 import datos.Profesor;
 import excepciones.ExcepcionMaximoValoraciones;
@@ -29,6 +30,8 @@ public class Main {
         // lista_associaciones.LlegirFitxer(); falta fer el serializable
         ListaAcciones lista_acciones = new ListaAcciones();
         lista_acciones.LlegirFitxer();
+        ListaMiembros lista_miembros = new ListaMiembros();
+        // lista_miembros.LlegitFitxer(); falta fer funcio
 
         int opcio;
         mostrarMenu();
@@ -43,7 +46,7 @@ public class Main {
                     break;
                 case 3:
                     opcio3(lista_associaciones);
-                break;
+                    break;
                 case 4:
                     opcio4();
                     break;
@@ -66,8 +69,9 @@ public class Main {
                     opcio10();
                     break;
                 case 11:
-                    opcio11();
+                    opcio11(lista_acciones);
                     break;
+        
                 case 12:
                     opcio12(lista_associaciones);
                     break;
@@ -93,11 +97,14 @@ public class Main {
                     break;
                 case 17:
                     opcio17();
-                    break;
-                case 18:
-                    opcio18();
                     break;  
             }
+            mostrarMenu();
+            opcio = Integer.parseInt(teclat.nextLine());
+        }
+        if (opcio == 18) 
+        {
+            opcio18(lista_acciones, lista_associaciones, lista_miembros);
         }
     }
     public static void mostrarMenu() {
@@ -314,7 +321,40 @@ public static void opcio9() {}
 
 public static void opcio10() {}
 
-public static void opcio11() {}
+public static void opcio11(ListaAcciones listaAcciones) {
+    System.out.println("Consultant demostracions no actives...\n");
+
+    double costoTotal = 0.0;
+    int demostracionesNoActivas = 0;
+
+    for (int i = 0; i < listaAcciones.getNElem(); i++) {
+        Accion accion = listaAcciones.obtenerAccion(i);
+
+        if (accion instanceof Demostracion) {
+            Demostracion demostracion = (Demostracion) accion;
+
+            if (!demostracion.isActiva()) {
+                 demostracionesNoActivas++;
+
+                System.out.println("Demostració no activa trobada:");
+                System.out.println("- Codi: " + demostracion.getCodigo());
+                System.out.println("- Títol: " + demostracion.getTitulo());
+                System.out.println("- Data de diseny: " + demostracion.getFechaDiseño());
+                System.out.println("- Cops : " + demostracion.getVecesOfrecida());
+                System.out.println("- Cost de materials: " + demostracion.getCosteMateriales() + "\n");
+
+                costoTotal += demostracion.getCosteMateriales();
+            }
+        }
+    }
+
+    if (demostracionesNoActivas == 0) {
+        System.out.println("No s'han' demostracions no actives.");
+    } else {
+        System.out.println("Cost total de les demostracions no actives: " + costoTotal);
+    }
+}
+
 
 public static void opcio12(ListaAsociaciones listaAsociaciones) 
 {
@@ -375,5 +415,5 @@ public static void opcio16() {}
 
 public static void opcio17() {}
 
-public static void opcio18() {}
+public static void opcio18(ListaAcciones listaAcciones, ListaAsociaciones listaAccionesa, ListaMiembros listaMiembros) {}
 }

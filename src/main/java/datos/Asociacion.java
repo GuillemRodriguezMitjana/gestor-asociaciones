@@ -1,8 +1,8 @@
 package datos;
+import listas.ListaMiembros;
+import listas.ListaAcciones;
 
 import java.io.Serializable;
-
-import listas.*;
 
 public class Asociacion implements Serializable {
 
