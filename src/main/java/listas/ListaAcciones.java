@@ -150,6 +150,17 @@ public class ListaAcciones {
         return null;
     }
 
+    public void eliminarAccion(int index) {
+        if (index >= 0 && index < nElem) {
+            for (int i = index; i < nElem - 1; i++) {
+                lista[i] = lista[i + 1];
+            }
+            lista[nElem - 1] = null; 
+            nElem--;
+        }
+    }
+    
+
     @Override
 public String toString() {
     StringBuilder sb = new StringBuilder();

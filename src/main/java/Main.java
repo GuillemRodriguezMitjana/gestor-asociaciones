@@ -96,7 +96,7 @@ public class Main {
                     opcio16();
                     break;
                 case 17:
-                    opcio17();
+                    opcio17(lista_acciones);
                     break;  
             }
             mostrarMenu();
@@ -413,7 +413,48 @@ public static void opcio15() {}
 
 public static void opcio16() {}
 
-public static void opcio17() {}
+public static void opcio17(ListaAcciones listaAcciones) {
+    System.out.println("Donar de baixa demostracions no actives dissenyades abans d'una data específica.\n");
+    System.out.print("Introdueix la data límit (dd/MM/yyyy): ");
+    String fechaLimiteStr = teclat.nextLine();
+
+ 
+    Fecha fechaLimite = Fecha.parse(fechaLimiteStr);
+
+    boolean eliminacionesRealizadas = false;
+
+    // Buscar no actives
+    for (int i = 0; i < listaAcciones.getNElem(); i++) {
+        Accion accion = listaAcciones.obtenerAccion(i);
+
+        if (accion instanceof Demostracion) {
+            Demostracion demostracion = (Demostracion) accion;
+
+            if (!demostracion.isActiva() && demostracion.getFechaDiseño().before(fechaLimite)) {
+                // Eliminar la demostració
+                listaAcciones.eliminarAccion(i);
+                i--; // Ajustar l'index 
+
+                // Info
+                System.out.println("Demostració eliminada:");
+                System.out.println("- Codi: " + demostracion.getCodigo());
+                System.out.println("- Títol: " + demostracion.getTitulo());
+                System.out.println("- Data de disseny: " + demostracion.getFechaDiseño() + "\n");
+
+                eliminacionesRealizadas = true;
+            }
+        }
+    }
+
+    // Missatge
+    if (!eliminacionesRealizadas) {
+        System.out.println("No s'han trobat demostracions no actives a eliminar abans de la data indicada.");
+    } else {
+        System.out.println("S'han eliminat les demostracions no actives dissenyades abans de " + fechaLimite + ".");
+    }
+}
+
+
 
 public static void opcio18(ListaAcciones listaAcciones, ListaAsociaciones listaAccionesa, ListaMiembros listaMiembros) {}
 }
