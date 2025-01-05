@@ -3,6 +3,9 @@ package listas;
 import java.io.Serializable;
 
 import datos.Asociacion;
+import excepciones.ExcepcionAsociacionNoEncontrada;
+import excepciones.ExcepcionIndiceFueraDeRango;
+import excepciones.ExcepcionListaAsociacionLlena;
 
 public class ListaAsociaciones implements Serializable{
 
@@ -16,28 +19,28 @@ public class ListaAsociaciones implements Serializable{
         nElem = 0;
     }
 
-    public boolean agregarAsociacion(Asociacion asociacion) {
+    public boolean agregarAsociacion(Asociacion asociacion) throws ExcepcionListaAsociacionLlena {
         if (nElem < lista.length) {
             lista[nElem++] = asociacion;
             return true;
         }
-        return false;
+        throw new ExcepcionListaAsociacionLlena("La lista de asociaciones está llena.");
     }
 
-    public Asociacion obtenerAsociacion(int index) {
+    public Asociacion obtenerAsociacion(int index) throws ExcepcionIndiceFueraDeRango {
         if (index >= 0 && index < nElem) {
             return lista[index];
         }
-        return null;
+        throw new ExcepcionIndiceFueraDeRango("El índice " + index + " está fuera del rango permitido.");
     }
 
-    public Asociacion buscarAsociacion(String nombre) {
+    public Asociacion buscarAsociacion(String nombre) throws ExcepcionAsociacionNoEncontrada{
         for (int i = 0; i < nElem; i++) {
             if (lista[i].getName().equalsIgnoreCase(nombre)) {
                 return lista[i];
             }
         }
-        return null;
+        throw new ExcepcionAsociacionNoEncontrada("La asociación \"" + nombre + "\" no fue encontrada.");
     }
 
     public int getNElem() {

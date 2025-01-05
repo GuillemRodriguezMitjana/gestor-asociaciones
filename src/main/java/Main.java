@@ -33,6 +33,9 @@ public class Main {
         ListaMiembros lista_miembros = new ListaMiembros();
         // lista_miembros.LlegitFitxer(); falta fer funcio
 
+
+        // falta cargar datos desde ficheros
+        
         int opcio;
         mostrarMenu();
         opcio = Integer.parseInt(teclat.nextLine());
