@@ -1,6 +1,7 @@
     package datos;
 
-    import listas.ListaAsociaciones;
+    import excepciones.ExcepcionMaximoAsociaciones;
+import listas.ListaAsociaciones;
 
     public abstract class Miembro {
 
@@ -56,45 +57,44 @@
             this.fechaBaja = fechaBaja;
         }
 
-        // Métodos adicionales
         public boolean estaActivo() {
             return fechaBaja == null;
         }
 
-        public void agregarAsociacion(Asociacion asociacion) throws Exception {
+        public void agregarAsociacion(Asociacion asociacion) throws ExcepcionMaximoAsociaciones {
             if (asociaciones.getNElem() >= 3) {
-                throw new Exception("El miembro no puede pertenecer a más de 3 asociaciones.");
+                throw new ExcepcionMaximoAsociaciones("El miembro no puede pertenecer a más de 3 asociaciones.");
             }
             asociaciones.agregarAsociacion(asociacion);
         }
 
         @Override
-public String toString() {
-    String resultado = "Miembro [Alias: " + alias + 
-                       ", Correo: " + correo + 
-                       ", Fecha Alta: ";
-    if (fechaAlta != null) {
-        resultado += fechaAlta;
-    } else {
-        resultado += "No registrada";
+        public String toString() {
+        String resultado = "Miembro [Alias: " + alias + 
+                        ", Correo: " + correo + 
+                        ", Fecha Alta: ";
+        if (fechaAlta != null) {
+            resultado += fechaAlta;
+        } else {
+            resultado += "No registrada";
+        }
+
+        resultado += ", Fecha Baja: ";
+        if (fechaBaja != null) {
+            resultado += fechaBaja;
+        } else {
+            resultado += "Activo";
+        }
+
+        resultado += ", Asociaciones: ";
+        if (asociaciones.getNElem() > 0) {
+            resultado += asociaciones.toString();
+        } else {
+            resultado += "Ninguna";
+        }
+
+        resultado += "]";
+        return resultado;
     }
 
-    resultado += ", Fecha Baja: ";
-    if (fechaBaja != null) {
-        resultado += fechaBaja;
-    } else {
-        resultado += "Activo";
-    }
-
-    resultado += ", Asociaciones: ";
-    if (asociaciones.getNElem() > 0) {
-        resultado += asociaciones.toString();
-    } else {
-        resultado += "Ninguna";
-    }
-
-    resultado += "]";
-    return resultado;
 }
-
-    }

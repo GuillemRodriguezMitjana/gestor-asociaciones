@@ -1,11 +1,5 @@
 package listas;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import datos.Asociacion;
@@ -51,17 +45,15 @@ public class ListaAsociaciones implements Serializable{
     }
     
     @Override
-public String toString() {
-    String resultado = "[";
-    for (int i = 0; i < nElem; i++) {
-        resultado += lista[i].getName();
-        if (i < nElem - 1) {
-            resultado += ", ";
+    public String toString() {
+        String resultado = "[";
+        for (int i = 0; i < nElem; i++) {
+            resultado += lista[i].getName();
+            if (i < nElem - 1) {
+                resultado += ", ";
+            }
         }
+        resultado += "]";
+        return resultado;
     }
-    resultado += "]";
-    return resultado;
-}
-
-
 }
