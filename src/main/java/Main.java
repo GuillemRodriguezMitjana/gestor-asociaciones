@@ -7,6 +7,7 @@ import datos.Charla;
 import datos.Demostracion;
 import datos.Miembro;
 import datos.Profesor;
+import excepciones.ExcepcionAsociacionNoEncontrada;
 import excepciones.ExcepcionMaximoValoraciones;
 import listas.ListaMiembros;
 import listas.ListaAcciones;
@@ -205,7 +206,7 @@ public class Main {
         }
     }
 
-public static void opcio4() {
+    public static void opcio4() {
     System.out.println("Mostrar accions (1. Totes, 2. Charlas, 3. Demostracions)");
     int filtro = Integer.parseInt(teclat.nextLine());
 
@@ -227,7 +228,7 @@ public static void opcio4() {
     ListaAcciones.mostrarAcciones(tipoFiltro);
 }
 
-    public static void opcio4() {}
+
 
 public static void opcio5(ListaAsociaciones listaAsociaciones) {
     System.out.print("Introdueix el nom de l'associació: ");
@@ -241,7 +242,7 @@ public static void opcio5(ListaAsociaciones listaAsociaciones) {
     }
 }
 
-    public static void opcio5() {}
+    
 
     public static void opcio6(ListaAcciones listaAcciones) {
         System.out.print("Introduce la fecha de inicio (dd/MM/yyyy): ");
@@ -362,17 +363,21 @@ public static void opcio9(ListaAsociaciones listaAsociaciones) {
     System.out.print("Introdueix el nom de l'associació: ");
     String nombreAsociacion = teclat.nextLine();
 
-    Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
-    if (asociacion == null) {
-        System.out.println("Associació no trobada.");
-        return;
+    try {
+        Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
+        if (asociacion == null) {
+            System.out.println("Associació no trobada.");
+            return;
+        }
+        ListaAcciones.agregarNuevaCharla(asociacion);
+    } catch (ExcepcionAsociacionNoEncontrada e) {
+        System.out.println("Error: " + e.getMessage());
     }
-
-    ListaAcciones.agregarNuevaCharla(asociacion);
 }
 
 
-    public static void opcio9() {}
+
+  
 
     public static void opcio10() {}
 
@@ -451,7 +456,7 @@ public static void opcio13() {
     ListaAcciones.mostrarCharlasConMasAsistentes(minAsistentes);
 }
 
-    public static void opcio13() {}
+    
 
     public static void opcio14(Charla charla) {
         System.out.print("Introdueix la teva valoració de la xerrada (0 a 10): ");
@@ -475,7 +480,7 @@ public static void opcio15() {
     ListaAcciones.mostrarCharlaMejorValorada();
 }
 
-    public static void opcio15() {}
+    
 
     public static void opcio16() {}
 
