@@ -154,11 +154,6 @@ public class ListaAcciones {
         }
     }
 
-
-
-
-
-
     public void LlegirFitxer() {
         try {
             BufferedReader f = new BufferedReader(new FileReader("acciones.txt"));

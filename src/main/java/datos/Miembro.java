@@ -1,5 +1,6 @@
     package datos;
 
+    import excepciones.ExcepcionListaAsociacionLlena;
     import excepciones.ExcepcionMaximoAsociaciones;
 import listas.ListaAsociaciones;
 
@@ -61,7 +62,7 @@ import listas.ListaAsociaciones;
             return fechaBaja == null;
         }
 
-        public void agregarAsociacion(Asociacion asociacion) throws ExcepcionMaximoAsociaciones {
+        public void agregarAsociacion(Asociacion asociacion) throws ExcepcionMaximoAsociaciones, ExcepcionListaAsociacionLlena {
             if (asociaciones.getNElem() >= 3) {
                 throw new ExcepcionMaximoAsociaciones("El miembro no puede pertenecer a más de 3 asociaciones.");
             }

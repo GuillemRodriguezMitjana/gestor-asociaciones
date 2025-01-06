@@ -13,7 +13,10 @@ import listas.ListaAcciones;
 import listas.ListaAsociaciones;
 import datos.Fecha;
 
+
+
 public class Main {
+    
     private static void mostrarlistaAcciones(ListaAcciones llista) {
         System.out.println(llista.toString());
     }
@@ -35,7 +38,7 @@ public class Main {
 
 
         // falta cargar datos desde ficheros
-        
+
         int opcio;
         mostrarMenu();
         opcio = Integer.parseInt(teclat.nextLine());
@@ -132,332 +135,332 @@ public class Main {
         System.out.println("18. Sortir de l'aplicació.");
     }
 
-public static void opcio1() {}
+    public static void opcio1() {}
 
-public static void opcio2(ListaAsociaciones listaAsociaciones) 
-{
-    System.out.print("Introdueix el nom de l'associació': ");
-        String nombreAsociacion = teclat.nextLine();
+    public static void opcio2(ListaAsociaciones listaAsociaciones) 
+    {
+        System.out.print("Introdueix el nom de l'associació': ");
+            String nombreAsociacion = teclat.nextLine();
 
-        Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
-        if (asociacion != null) {
-            System.out.println("Selecciona el tipus de membre a mostrar:");
-            System.out.println("1. Professors");
-            System.out.println("2. Alumnes");
-            System.out.println("3. Les dues");
-            System.out.print("Introduce una opción (1-3): ");
-            int filtro = Integer.parseInt(teclat.nextLine());
+            Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
+            if (asociacion != null) {
+                System.out.println("Selecciona el tipus de membre a mostrar:");
+                System.out.println("1. Professors");
+                System.out.println("2. Alumnes");
+                System.out.println("3. Les dues");
+                System.out.print("Introduce una opción (1-3): ");
+                int filtro = Integer.parseInt(teclat.nextLine());
 
+                ListaMiembros miembros = asociacion.getMiembros();
+                boolean miembrosEncontrados = false;
+
+                for (int i = 0; i < miembros.getNElem(); i++) {
+                    Miembro miembro = miembros.obtenerMiembro(i);
+                    if ((filtro == 1 && miembro instanceof Profesor) ||
+                        (filtro == 2 && miembro instanceof Alumno) ||
+                        (filtro == 3)) {
+                        System.out.println(miembro);
+                        miembrosEncontrados = true;
+                    }
+                }
+                if (!miembrosEncontrados) {
+                    System.out.println("No s'han trobat.");
+                }
+            } else {
+                System.out.println("Associació no trobada.");
+            }
+    }
+
+    public static void opcio3(ListaAsociaciones listaAsociaciones) 
+    {
+        System.out.println("Selecciona el tipus de membre actiu a mostrar:");
+        System.out.println("1. Professors");
+        System.out.println("2. Alumnes");
+        System.out.println("3. Les dues");
+        System.out.print("Introduce una opción (1-3): ");
+        int filtro = Integer.parseInt(teclat.nextLine());
+
+        boolean miembrosEncontrados = false;
+
+        for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
+            Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
             ListaMiembros miembros = asociacion.getMiembros();
-            boolean miembrosEncontrados = false;
 
-            for (int i = 0; i < miembros.getNElem(); i++) {
-                Miembro miembro = miembros.obtenerMiembro(i);
-                if ((filtro == 1 && miembro instanceof Profesor) ||
+            for (int j = 0; j < miembros.getNElem(); j++) {
+                Miembro miembro = miembros.obtenerMiembro(j);
+
+                if (miembro.estaActivo() && 
+                    ((filtro == 1 && miembro instanceof Profesor) ||
                     (filtro == 2 && miembro instanceof Alumno) ||
-                    (filtro == 3)) {
+                    (filtro == 3))) {
                     System.out.println(miembro);
                     miembrosEncontrados = true;
                 }
             }
-            if (!miembrosEncontrados) {
-                System.out.println("No s'han trobat.");
+        }
+
+        if (!miembrosEncontrados) {
+            System.out.println("No s'han trobat membres actius.");
+        }
+    }
+
+    public static void opcio4() {}
+
+    public static void opcio5() {}
+
+    public static void opcio6(ListaAcciones listaAcciones) {
+        System.out.print("Introduce la fecha de inicio (dd/MM/yyyy): ");
+        String fechaInicioStr = teclat.nextLine();
+        System.out.print("Introduce la fecha de fin (dd/MM/yyyy): ");
+        String fechaFinStr = teclat.nextLine();
+
+        try {
+            // Parseamos las fechas ingresadas por el usuario
+            Fecha fechaInicio = Fecha.parse(fechaInicioStr);
+            Fecha fechaFin = Fecha.parse(fechaFinStr);
+
+            System.out.println("\nBuscando charlas entre " + fechaInicio + " y " + fechaFin + "...\n");
+
+            boolean charlasEncontradas = false;
+
+            for (int i = 0; i < listaAcciones.getNElem(); i++) {
+                Accion accion = listaAcciones.obtenerAccion(i);
+
+                if (accion instanceof Charla) {
+                    Charla charla = (Charla) accion;
+                    Fecha fechaCharla = charla.getFechaCharla();
+
+                    // Validar si la charla está dentro del rango
+                    if (!fechaCharla.before(fechaInicio) && !fechaCharla.after(fechaFin)) {
+                        System.out.println("Charla encontrada:");
+                        System.out.println(charla);
+                        charlasEncontradas = true;
+                    }
+                }
             }
-        } else {
+
+            if (!charlasEncontradas) {
+                System.out.println("No se encontraron charlas dentro de la franja de fechas indicada.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al procesar las fechas: " + e.getMessage());
+        }
+    }
+
+    public static void opcio7() {}
+
+    public static void opcio8 (ListaAsociaciones listaAsociaciones) {
+        System.out.print("Introdueix el nom de l'associació: ");
+        String nombreAsociacion = teclat.nextLine();
+
+        Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
+        if (asociacion == null) {
             System.out.println("Associació no trobada.");
+            return;
         }
-}
 
-public static void opcio3(ListaAsociaciones listaAsociaciones) 
-{
-    System.out.println("Selecciona el tipus de membre actiu a mostrar:");
-    System.out.println("1. Professors");
-    System.out.println("2. Alumnes");
-    System.out.println("3. Les dues");
-    System.out.print("Introduce una opción (1-3): ");
-    int filtro = Integer.parseInt(teclat.nextLine());
+        System.out.print("Introdueix l'alias del membre: ");
+        String alias = teclat.nextLine();
 
-    boolean miembrosEncontrados = false;
+        Miembro miembro = null;
+        int i = 0;
+        while (miembro == null && i < listaAsociaciones.getNElem()) {
+            Asociacion assoc = listaAsociaciones.obtenerAsociacion(i);
+            ListaMiembros miembros = assoc.getMiembros();
 
-    for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
-        Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
-        ListaMiembros miembros = asociacion.getMiembros();
+            int j = 0;
+            while (miembro == null && j < miembros.getNElem()) {
+                Miembro m = miembros.obtenerMiembro(j);
+                if (m.getAlias().equals(alias)) {
+                    miembro = m;
+                }
+                j++;
+            }
+            i++;
+        }
 
-        for (int j = 0; j < miembros.getNElem(); j++) {
-            Miembro miembro = miembros.obtenerMiembro(j);
+        if (miembro == null) {
+            System.out.print("Introdueix el correu electrònic del nou membre: ");
+            String correo = teclat.nextLine();
 
-            if (miembro.estaActivo() && 
-                ((filtro == 1 && miembro instanceof Profesor) ||
-                 (filtro == 2 && miembro instanceof Alumno) ||
-                 (filtro == 3))) {
-                System.out.println(miembro);
-                miembrosEncontrados = true;
+            System.out.println("Selecciona el tipus de membre:");
+            System.out.println("1. Professor");
+            System.out.println("2. Alumne");
+            System.out.print("Introdueix una opció (1-2): ");
+            int tipoMiembro = Integer.parseInt(teclat.nextLine());
+
+            if (tipoMiembro == 1) {
+                System.out.print("Introdueix la data d'alta: ");
+                String fechaAlta = teclat.nextLine();
+                System.out.print("Introdueix el departament: ");
+                String departamento = teclat.nextLine();
+                System.out.print("Introdueix el número de despatx: ");
+                int numDespacho = Integer.parseInt(teclat.nextLine());
+
+                miembro = new Profesor(alias, correo, fechaAlta, departamento, numDespacho);
+            } else if (tipoMiembro == 2) {
+                System.out.print("Introdueix la data d'alta: ");
+                String fechaAlta = teclat.nextLine();
+                System.out.print("Introdueix la titulació: ");
+                String titulacion = teclat.nextLine();
+
+                miembro = new Alumno(alias, correo, fechaAlta, titulacion);
+            } else {
+                System.out.println("Tipus de membre no vàlid.");
+                return;
+            }
+
+            asociacion.getMiembros().agregarMiembro(miembro);
+            System.out.println("Nou membre creat i afegit a l'associació.");
+        } else {
+            try {
+                miembro.agregarAsociacion(asociacion);
+                asociacion.getMiembros().agregarMiembro(miembro);
+                System.out.println("El membre ha estat donat d'alta correctament a l'associació.");
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
 
-    if (!miembrosEncontrados) {
-        System.out.println("No s'han trobat membres actius.");
-    }
-}
+    public static void opcio9() {}
 
-public static void opcio4() {}
+    public static void opcio10() {}
 
-public static void opcio5() {}
+    public static void opcio11(ListaAcciones listaAcciones) {
+        System.out.println("Consultant demostracions no actives...\n");
 
-public static void opcio6(ListaAcciones listaAcciones) {
-    System.out.print("Introduce la fecha de inicio (dd/MM/yyyy): ");
-    String fechaInicioStr = teclat.nextLine();
-    System.out.print("Introduce la fecha de fin (dd/MM/yyyy): ");
-    String fechaFinStr = teclat.nextLine();
-
-    try {
-        // Parseamos las fechas ingresadas por el usuario
-        Fecha fechaInicio = Fecha.parse(fechaInicioStr);
-        Fecha fechaFin = Fecha.parse(fechaFinStr);
-
-        System.out.println("\nBuscando charlas entre " + fechaInicio + " y " + fechaFin + "...\n");
-
-        boolean charlasEncontradas = false;
+        double costoTotal = 0.0;
+        int demostracionesNoActivas = 0;
 
         for (int i = 0; i < listaAcciones.getNElem(); i++) {
             Accion accion = listaAcciones.obtenerAccion(i);
 
-            if (accion instanceof Charla) {
-                Charla charla = (Charla) accion;
-                Fecha fechaCharla = charla.getFechaCharla();
+            if (accion instanceof Demostracion) {
+                Demostracion demostracion = (Demostracion) accion;
 
-                // Validar si la charla está dentro del rango
-                if (!fechaCharla.before(fechaInicio) && !fechaCharla.after(fechaFin)) {
-                    System.out.println("Charla encontrada:");
-                    System.out.println(charla);
-                    charlasEncontradas = true;
+                if (!demostracion.isActiva()) {
+                    demostracionesNoActivas++;
+
+                    System.out.println("Demostració no activa trobada:");
+                    System.out.println("- Codi: " + demostracion.getCodigo());
+                    System.out.println("- Títol: " + demostracion.getTitulo());
+                    System.out.println("- Data de diseny: " + demostracion.getFechaDiseño());
+                    System.out.println("- Cops : " + demostracion.getVecesOfrecida());
+                    System.out.println("- Cost de materials: " + demostracion.getCosteMateriales() + "\n");
+
+                    costoTotal += demostracion.getCosteMateriales();
                 }
             }
         }
 
-        if (!charlasEncontradas) {
-            System.out.println("No se encontraron charlas dentro de la franja de fechas indicada.");
-        }
-    } catch (Exception e) {
-        System.out.println("Error al procesar las fechas: " + e.getMessage());
-    }
-}
-
-public static void opcio7() {}
-
-public static void opcio8 (ListaAsociaciones listaAsociaciones) {
-    System.out.print("Introdueix el nom de l'associació: ");
-    String nombreAsociacion = teclat.nextLine();
-
-    Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
-    if (asociacion == null) {
-        System.out.println("Associació no trobada.");
-        return;
-    }
-
-    System.out.print("Introdueix l'alias del membre: ");
-    String alias = teclat.nextLine();
-
-    Miembro miembro = null;
-    int i = 0;
-    while (miembro == null && i < listaAsociaciones.getNElem()) {
-        Asociacion assoc = listaAsociaciones.obtenerAsociacion(i);
-        ListaMiembros miembros = assoc.getMiembros();
-
-        int j = 0;
-        while (miembro == null && j < miembros.getNElem()) {
-            Miembro m = miembros.obtenerMiembro(j);
-            if (m.getAlias().equals(alias)) {
-                miembro = m;
-            }
-            j++;
-        }
-        i++;
-    }
-
-    if (miembro == null) {
-        System.out.print("Introdueix el correu electrònic del nou membre: ");
-        String correo = teclat.nextLine();
-
-        System.out.println("Selecciona el tipus de membre:");
-        System.out.println("1. Professor");
-        System.out.println("2. Alumne");
-        System.out.print("Introdueix una opció (1-2): ");
-        int tipoMiembro = Integer.parseInt(teclat.nextLine());
-
-        if (tipoMiembro == 1) {
-            System.out.print("Introdueix la data d'alta: ");
-            String fechaAlta = teclat.nextLine();
-            System.out.print("Introdueix el departament: ");
-            String departamento = teclat.nextLine();
-            System.out.print("Introdueix el número de despatx: ");
-            int numDespacho = Integer.parseInt(teclat.nextLine());
-
-            miembro = new Profesor(alias, correo, fechaAlta, departamento, numDespacho);
-        } else if (tipoMiembro == 2) {
-            System.out.print("Introdueix la data d'alta: ");
-            String fechaAlta = teclat.nextLine();
-            System.out.print("Introdueix la titulació: ");
-            String titulacion = teclat.nextLine();
-
-            miembro = new Alumno(alias, correo, fechaAlta, titulacion);
+        if (demostracionesNoActivas == 0) {
+            System.out.println("No s'han' demostracions no actives.");
         } else {
-            System.out.println("Tipus de membre no vàlid.");
+            System.out.println("Cost total de les demostracions no actives: " + costoTotal);
+        }
+    }
+
+
+    public static void opcio12(ListaAsociaciones listaAsociaciones) 
+    {
+        Miembro personaMasActiva = null;
+        int maxAsociaciones = 0;
+        String fechaMasAntigua = null;
+
+        for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
+            Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+            ListaMiembros miembros = asociacion.getMiembros();
+
+            for (int j = 0; j < miembros.getNElem(); j++) {
+                Miembro miembro = miembros.obtenerMiembro(j);
+                int numAsociaciones = miembro.getAsociaciones().getNElem();
+                String fechaAlta = miembro.getFechaAlta();
+
+                if (numAsociaciones > maxAsociaciones ||
+                    (numAsociaciones == maxAsociaciones && (fechaMasAntigua == null || fechaAlta.compareTo(fechaMasAntigua) < 0))) {
+
+                    personaMasActiva = miembro;
+                    maxAsociaciones = numAsociaciones;
+                    fechaMasAntigua = fechaAlta;
+                }
+            }
+        }
+
+        if (personaMasActiva != null) {
+            System.out.println("La persona més activa és: " + personaMasActiva);
+        } else {
+            System.out.println("No s'ha trobat cap persona activa.");
+        }
+    }
+
+
+    public static void opcio13() {}
+
+    public static void opcio14(Charla charla) {
+        System.out.print("Introdueix la teva valoració de la xerrada (0 a 10): ");
+        int valoracio = Integer.parseInt(teclat.nextLine());
+
+        if (valoracio < 0 || valoracio > 10) {
+            System.out.println("Valoració no vàlida. Ha de ser un valor entre 0 i 10.");
             return;
         }
 
-        asociacion.getMiembros().agregarMiembro(miembro);
-        System.out.println("Nou membre creat i afegit a l'associació.");
-    } else {
         try {
-            miembro.agregarAsociacion(asociacion);
-            asociacion.getMiembros().agregarMiembro(miembro);
-            System.out.println("El membre ha estat donat d'alta correctament a l'associació.");
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            charla.agregarValoracion(valoracio);
+            System.out.println("Gràcies per valorar la xerrada! La valoració mitjana actual és: " + charla.obtenerPromedioValoraciones());
+        } catch (ExcepcionMaximoValoraciones e) {
+            System.out.println("No es poden afegir més valoracions: " + e.getMessage());
         }
     }
-}
 
-public static void opcio9() {}
 
-public static void opcio10() {}
+    public static void opcio15() {}
 
-public static void opcio11(ListaAcciones listaAcciones) {
-    System.out.println("Consultant demostracions no actives...\n");
+    public static void opcio16() {}
 
-    double costoTotal = 0.0;
-    int demostracionesNoActivas = 0;
+    public static void opcio17(ListaAcciones listaAcciones) {
+        System.out.println("Donar de baixa demostracions no actives dissenyades abans d'una data específica.\n");
+        System.out.print("Introdueix la data límit (dd/MM/yyyy): ");
+        String fechaLimiteStr = teclat.nextLine();
 
-    for (int i = 0; i < listaAcciones.getNElem(); i++) {
-        Accion accion = listaAcciones.obtenerAccion(i);
+    
+        Fecha fechaLimite = Fecha.parse(fechaLimiteStr);
 
-        if (accion instanceof Demostracion) {
-            Demostracion demostracion = (Demostracion) accion;
+        boolean eliminacionesRealizadas = false;
 
-            if (!demostracion.isActiva()) {
-                 demostracionesNoActivas++;
+        // Buscar no actives
+        for (int i = 0; i < listaAcciones.getNElem(); i++) {
+            Accion accion = listaAcciones.obtenerAccion(i);
 
-                System.out.println("Demostració no activa trobada:");
-                System.out.println("- Codi: " + demostracion.getCodigo());
-                System.out.println("- Títol: " + demostracion.getTitulo());
-                System.out.println("- Data de diseny: " + demostracion.getFechaDiseño());
-                System.out.println("- Cops : " + demostracion.getVecesOfrecida());
-                System.out.println("- Cost de materials: " + demostracion.getCosteMateriales() + "\n");
+            if (accion instanceof Demostracion) {
+                Demostracion demostracion = (Demostracion) accion;
 
-                costoTotal += demostracion.getCosteMateriales();
+                if (!demostracion.isActiva() && demostracion.getFechaDiseño().before(fechaLimite)) {
+                    // Eliminar la demostració
+                    listaAcciones.eliminarAccion(i);
+                    i--; // Ajustar l'index 
+
+                    // Info
+                    System.out.println("Demostració eliminada:");
+                    System.out.println("- Codi: " + demostracion.getCodigo());
+                    System.out.println("- Títol: " + demostracion.getTitulo());
+                    System.out.println("- Data de disseny: " + demostracion.getFechaDiseño() + "\n");
+
+                    eliminacionesRealizadas = true;
+                }
             }
         }
-    }
 
-    if (demostracionesNoActivas == 0) {
-        System.out.println("No s'han' demostracions no actives.");
-    } else {
-        System.out.println("Cost total de les demostracions no actives: " + costoTotal);
-    }
-}
-
-
-public static void opcio12(ListaAsociaciones listaAsociaciones) 
-{
-    Miembro personaMasActiva = null;
-    int maxAsociaciones = 0;
-    String fechaMasAntigua = null;
-
-    for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
-        Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
-        ListaMiembros miembros = asociacion.getMiembros();
-
-        for (int j = 0; j < miembros.getNElem(); j++) {
-            Miembro miembro = miembros.obtenerMiembro(j);
-            int numAsociaciones = miembro.getAsociaciones().getNElem();
-            String fechaAlta = miembro.getFechaAlta();
-
-            if (numAsociaciones > maxAsociaciones ||
-                (numAsociaciones == maxAsociaciones && (fechaMasAntigua == null || fechaAlta.compareTo(fechaMasAntigua) < 0))) {
-
-                personaMasActiva = miembro;
-                maxAsociaciones = numAsociaciones;
-                fechaMasAntigua = fechaAlta;
-            }
+        // Missatge
+        if (!eliminacionesRealizadas) {
+            System.out.println("No s'han trobat demostracions no actives a eliminar abans de la data indicada.");
+        } else {
+            System.out.println("S'han eliminat les demostracions no actives dissenyades abans de " + fechaLimite + ".");
         }
     }
 
-    if (personaMasActiva != null) {
-        System.out.println("La persona més activa és: " + personaMasActiva);
-    } else {
-        System.out.println("No s'ha trobat cap persona activa.");
-    }
-}
 
 
-public static void opcio13() {}
-
-public static void opcio14(Charla charla) {
-    System.out.print("Introdueix la teva valoració de la xerrada (0 a 10): ");
-    int valoracio = Integer.parseInt(teclat.nextLine());
-
-    if (valoracio < 0 || valoracio > 10) {
-        System.out.println("Valoració no vàlida. Ha de ser un valor entre 0 i 10.");
-        return;
-    }
-
-    try {
-        charla.agregarValoracion(valoracio);
-        System.out.println("Gràcies per valorar la xerrada! La valoració mitjana actual és: " + charla.obtenerPromedioValoraciones());
-    } catch (ExcepcionMaximoValoraciones e) {
-        System.out.println("No es poden afegir més valoracions: " + e.getMessage());
-    }
-}
-
-
-public static void opcio15() {}
-
-public static void opcio16() {}
-
-public static void opcio17(ListaAcciones listaAcciones) {
-    System.out.println("Donar de baixa demostracions no actives dissenyades abans d'una data específica.\n");
-    System.out.print("Introdueix la data límit (dd/MM/yyyy): ");
-    String fechaLimiteStr = teclat.nextLine();
-
- 
-    Fecha fechaLimite = Fecha.parse(fechaLimiteStr);
-
-    boolean eliminacionesRealizadas = false;
-
-    // Buscar no actives
-    for (int i = 0; i < listaAcciones.getNElem(); i++) {
-        Accion accion = listaAcciones.obtenerAccion(i);
-
-        if (accion instanceof Demostracion) {
-            Demostracion demostracion = (Demostracion) accion;
-
-            if (!demostracion.isActiva() && demostracion.getFechaDiseño().before(fechaLimite)) {
-                // Eliminar la demostració
-                listaAcciones.eliminarAccion(i);
-                i--; // Ajustar l'index 
-
-                // Info
-                System.out.println("Demostració eliminada:");
-                System.out.println("- Codi: " + demostracion.getCodigo());
-                System.out.println("- Títol: " + demostracion.getTitulo());
-                System.out.println("- Data de disseny: " + demostracion.getFechaDiseño() + "\n");
-
-                eliminacionesRealizadas = true;
-            }
-        }
-    }
-
-    // Missatge
-    if (!eliminacionesRealizadas) {
-        System.out.println("No s'han trobat demostracions no actives a eliminar abans de la data indicada.");
-    } else {
-        System.out.println("S'han eliminat les demostracions no actives dissenyades abans de " + fechaLimite + ".");
-    }
-}
-
-
-
-public static void opcio18(ListaAcciones listaAcciones, ListaAsociaciones listaAccionesa, ListaMiembros listaMiembros) {}
+    public static void opcio18(ListaAcciones listaAcciones, ListaAsociaciones listaAccionesa, ListaMiembros listaMiembros) {}
 }
