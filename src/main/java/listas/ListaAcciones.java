@@ -87,7 +87,8 @@ public class ListaAcciones {
         String titulo = scanner.nextLine();
 
         System.out.print("Fecha de la charla (dd/mm/yyyy): ");
-        String fecha = scanner.nextLine();
+        String fechaStr = scanner.nextLine();
+        Fecha fecha = Fecha.parse(fechaStr);
 
         System.out.print("Responsable (alias): ");
         String responsableAlias = scanner.nextLine();
