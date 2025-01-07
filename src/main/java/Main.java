@@ -8,6 +8,7 @@ import datos.Demostracion;
 import datos.Miembro;
 import datos.Profesor;
 import excepciones.ExcepcionAsociacionNoEncontrada;
+import excepciones.ExcepcionIndiceFueraDeRango;
 import excepciones.ExcepcionMaximoValoraciones;
 import listas.ListaMiembros;
 import listas.ListaAcciones;
@@ -58,7 +59,11 @@ public class Main {
                     opcio4();
                     break;
                 case 5:
-                    opcio5(lista_associaciones);
+                    try {
+                        opcio5(lista_associaciones);
+                    } catch (ExcepcionAsociacionNoEncontrada e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 6:
                     opcio6(lista_acciones);
@@ -185,7 +190,12 @@ public class Main {
         boolean miembrosEncontrados = false;
 
         for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
-            Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+            Asociacion asociacion = null;
+            try {
+                asociacion = listaAsociaciones.obtenerAsociacion(i);
+            } catch (ExcepcionIndiceFueraDeRango e) {
+                e.printStackTrace();
+            }
             ListaMiembros miembros = asociacion.getMiembros();
 
             for (int j = 0; j < miembros.getNElem(); j++) {
@@ -225,7 +235,11 @@ public class Main {
             System.out.println("Opció no vàlida.");
             return;
     }
-    ListaAcciones.mostrarAcciones(tipoFiltro);
+
+    // Para llamar a la función mostrarAcciones() debería de ser a una instancia y no a la clase directamente. 
+    //      Ejemplo: lista = new ListaAcciones();
+    //               lista.mostrarAcciones();
+    // ListaAcciones.mostrarAcciones(tipoFiltro);
 }
 
 
@@ -235,7 +249,8 @@ public static void opcio5(ListaAsociaciones listaAsociaciones) throws ExcepcionA
     String nombreAsociacion = teclat.nextLine();
 
     Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
-    ListaAcciones.mostrarAccionesPorAsociacion(asociacion);
+    // Lo mismo que está explicado en la 239
+    // ListaAcciones.mostrarAccionesPorAsociacion(asociacion);
 }
 
 
@@ -298,7 +313,12 @@ public static void opcio5(ListaAsociaciones listaAsociaciones) throws ExcepcionA
         Miembro miembro = null;
         int i = 0;
         while (miembro == null && i < listaAsociaciones.getNElem()) {
-            Asociacion assoc = listaAsociaciones.obtenerAsociacion(i);
+            Asociacion assoc = null;
+            try {
+                assoc = listaAsociaciones.obtenerAsociacion(i);
+            } catch (ExcepcionIndiceFueraDeRango e) {
+                e.printStackTrace();
+            }
             ListaMiembros miembros = assoc.getMiembros();
 
             int j = 0;
@@ -366,8 +386,9 @@ public static void opcio9(ListaAsociaciones listaAsociaciones) {
             System.out.println("Associació no trobada.");
             return;
         }
-        ListaAcciones.agregarNuevaCharla(asociacion);
-    } catch (ExcepcionAsociacionNoEncontrada e) {
+        // Lo mismo que está explicado en la 239
+        // ListaAcciones.agregarNuevaCharla(asociacion);
+    } catch (Exception e) {
         System.out.println("Error: " + e.getMessage());
     }
 }
@@ -420,7 +441,12 @@ public static void opcio9(ListaAsociaciones listaAsociaciones) {
         String fechaMasAntigua = null;
 
         for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
-            Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+            Asociacion asociacion = null;
+            try {
+                asociacion = listaAsociaciones.obtenerAsociacion(i);
+            } catch (ExcepcionIndiceFueraDeRango e) {
+                e.printStackTrace();
+            }
             ListaMiembros miembros = asociacion.getMiembros();
 
             for (int j = 0; j < miembros.getNElem(); j++) {
@@ -450,7 +476,8 @@ public static void opcio13() {
     System.out.print("Introdueix el nombre mínim d'assistents: ");
     int minAsistentes = Integer.parseInt(teclat.nextLine());
 
-    ListaAcciones.mostrarCharlasConMasAsistentes(minAsistentes);
+    // Lo mismo que está explicado en la 239
+   //  ListaAcciones.mostrarCharlasConMasAsistentes(minAsistentes);
 }
 
     
@@ -474,7 +501,8 @@ public static void opcio13() {
 
 
 public static void opcio15() {
-    ListaAcciones.mostrarCharlaMejorValorada();
+    // Lo mismo que está explicado en la 239
+    // ListaAcciones.mostrarCharlaMejorValorada();
 }
 
     

@@ -1,4 +1,4 @@
-package Interficie_grafica;
+package actionListeners;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +8,7 @@ import java.util.List;
 import listas.ListaAcciones;
 import listas.ListaAsociaciones;
 import datos.Demostracion;
+import excepciones.*;
 import datos.Asociacion;
 
 public class InterficieGrafica extends JFrame {
@@ -40,7 +41,12 @@ public class InterficieGrafica extends JFrame {
         filtroAsociaciones.addItem("Todas");
 
         for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
-            Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+            Asociacion asociacion = null;
+            try {
+                asociacion = listaAsociaciones.obtenerAsociacion(i);
+            } catch (ExcepcionIndiceFueraDeRango e) {
+                System.out.println("...");
+            }
             filtroAsociaciones.addItem(asociacion.getName());
         }
 
@@ -102,10 +108,11 @@ public class InterficieGrafica extends JFrame {
                 if (listaAcciones.obtenerAccion(i) instanceof Demostracion) {
                     Demostracion demo = (Demostracion) listaAcciones.obtenerAccion(i);
 
+                    /*
                     if (demo.isActiva() && ("Todas".equals(seleccionFiltro) ||
                         seleccionFiltro.equals(demo.getAsociacion().getName()))) {
                         modeloLista.addElement(demo.getCodigo() + " - " + demo.getTitulo());
-                    }
+                    }*/
                 }
             }
         }

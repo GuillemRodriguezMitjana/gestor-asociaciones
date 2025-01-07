@@ -1,14 +1,17 @@
 package listas;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.Serializable;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 import datos.Asociacion;
 import datos.Accion;
 import datos.Charla;
-import excepciones.ExcepcionAsociacionNoEncontrada;
-import excepciones.ExcepcionIndiceFueraDeRango;
-import excepciones.ExcepcionListaAsociacionLlena;
+import datos.Demostracion;
+import datos.Fecha;
+import excepciones.*;
 
 public class ListaAsociaciones implements Serializable{
 
@@ -133,4 +136,9 @@ public class ListaAsociaciones implements Serializable{
         System.out.println("¡Gracias por usar la aplicación! Cerrando...");
         System.exit(0);
     }
+
+    public void LlegirFitxer() {
+        
+    }
+
 }

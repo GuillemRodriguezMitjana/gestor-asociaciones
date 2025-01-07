@@ -1,8 +1,6 @@
 package datos;
 
 
-
-
 public class Demostracion extends Accion {
 
     private Fecha fechaDiseño;
