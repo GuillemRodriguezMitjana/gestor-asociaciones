@@ -8,6 +8,7 @@ import datos.Demostracion;
 import datos.Miembro;
 import datos.Profesor;
 import excepciones.ExcepcionAsociacionNoEncontrada;
+import excepciones.ExcepcionIndiceFueraDeRango;
 import excepciones.ExcepcionMaximoValoraciones;
 import listas.ListaMiembros;
 import listas.ListaAcciones;
@@ -28,7 +29,7 @@ public class Main {
         System.out.println(llista.toString());
     }   
     static Scanner teclat = new Scanner(System.in);
-    public static void main(String[] args){
+    public static void main(String[] args) throws ExcepcionAsociacionNoEncontrada, ExcepcionIndiceFueraDeRango{
 
         ListaAsociaciones lista_associaciones = new ListaAsociaciones(50);
         // lista_associaciones.LlegirFitxer(); falta fer el serializable
@@ -57,9 +58,14 @@ public class Main {
                 case 4:
                     opcio4();
                     break;
-                case 5:
-                    opcio5(lista_associaciones);
+                    case 5:
+                    try {
+                        opcio5(lista_associaciones);
+                    } catch (ExcepcionAsociacionNoEncontrada e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
                     break;
+                
                 case 6:
                     opcio6(lista_acciones);
                     break;
@@ -83,8 +89,12 @@ public class Main {
                 case 12:
                     opcio12(lista_associaciones);
                     break;
-                case 13:
-                    opcio13();
+                    case 13:
+                    try {
+                        opcio13();
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
                     break;
                 case 14:
                     System.out.print("Introdueix el codi de la xerrada a valorar: ");
@@ -97,8 +107,12 @@ public class Main {
                         System.out.println("No s'ha trobat cap xerrada amb aquest codi.");
                     }
                     break;
-                case 15:
-                    opcio15();
+                    case 15:
+                    try {
+                        opcio15();
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
                     break;
                 case 16:
                     opcio16();
@@ -139,7 +153,7 @@ public class Main {
 
     public static void opcio1() {}
 
-    public static void opcio2(ListaAsociaciones listaAsociaciones) 
+    public static void opcio2(ListaAsociaciones listaAsociaciones) throws ExcepcionAsociacionNoEncontrada 
     {
         System.out.print("Introdueix el nom de l'associació': ");
             String nombreAsociacion = teclat.nextLine();
@@ -173,7 +187,7 @@ public class Main {
             }
     }
 
-    public static void opcio3(ListaAsociaciones listaAsociaciones) 
+    public static void opcio3(ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango 
     {
         System.out.println("Selecciona el tipus de membre actiu a mostrar:");
         System.out.println("1. Professors");
@@ -282,7 +296,7 @@ public static void opcio5(ListaAsociaciones listaAsociaciones) throws ExcepcionA
 
     public static void opcio7() {}
 
-    public static void opcio8 (ListaAsociaciones listaAsociaciones) {
+    public static void opcio8 (ListaAsociaciones listaAsociaciones) throws ExcepcionAsociacionNoEncontrada, ExcepcionIndiceFueraDeRango {
         System.out.print("Introdueix el nom de l'associació: ");
         String nombreAsociacion = teclat.nextLine();
 
@@ -413,7 +427,7 @@ public static void opcio9(ListaAsociaciones listaAsociaciones) {
     }
 
 
-    public static void opcio12(ListaAsociaciones listaAsociaciones) 
+    public static void opcio12(ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango 
     {
         Miembro personaMasActiva = null;
         int maxAsociaciones = 0;
