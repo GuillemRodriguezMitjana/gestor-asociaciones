@@ -71,7 +71,7 @@ public class Main {
                     opcio6(lista_acciones);
                     break;
                 case 7:
-                    opcio7(lista_associaciones);
+                    opcio7(lista_associaciones, lista_miembros);
                     break;
                 case 8:
                     opcio8(lista_associaciones);
@@ -304,32 +304,57 @@ public static void opcio6(ListaAcciones listaAcciones) {
         }
     }
 
-    public static void opcio7(ListaAsociaciones listaAsociaciones) {
-    Scanner scanner = new Scanner(System.in);
-
-    System.out.println("Introduce los datos de la nueva asociación:");
-
-    System.out.print("Nombre de la asociación: ");
-    String nombre = scanner.nextLine();
-
-    System.out.print("Correo de contacto: ");
-    String correo = scanner.nextLine();
-
-    System.out.print("Titulaciones (separadas por comas): ");
-    String[] titulaciones = scanner.nextLine().split(",");
-
-    Asociacion nuevaAsociacion = new Asociacion(nombre, correo, titulaciones);
-
-    try {
-        if (listaAsociaciones.agregarAsociacion(nuevaAsociacion)) {
-            System.out.println("Asociación añadida con éxito: " + nuevaAsociacion);
+    public static void opcio7(ListaAsociaciones listaAsociaciones, ListaMiembros listaMiembros) {
+        Scanner scanner = new Scanner(System.in);
+    
+        System.out.println("Introduce los datos de la nueva asociación:");
+    
+        System.out.print("Nombre de la asociación: ");
+        String nombre = scanner.nextLine();
+    
+        System.out.print("Correo de contacto: ");
+        String correo = scanner.nextLine();
+    
+        System.out.print("Titulaciones (separadas por comas): ");
+        String[] titulaciones = scanner.nextLine().split(",");
+    
+        Asociacion nuevaAsociacion = new Asociacion(nombre, correo, titulaciones);
+    
+        System.out.println("Introduce los datos de los miembros con cargos:");
+    
+        System.out.print("Alias del presidente: ");
+        String aliasPresidente = scanner.nextLine();
+        Miembro presidente = listaMiembros.buscarMiembro(aliasPresidente);
+    
+        System.out.print("Alias del secretario: ");
+        String aliasSecretario = scanner.nextLine();
+        Miembro secretario = listaMiembros.buscarMiembro(aliasSecretario);
+    
+        System.out.print("Alias del tesorero: ");
+        String aliasTesorero = scanner.nextLine();
+        Miembro tesorero = listaMiembros.buscarMiembro(aliasTesorero);
+    
+        boolean datosValidos = presidente != null && secretario != null && tesorero != null;
+    
+        if (datosValidos) {
+            nuevaAsociacion.setPresidente(presidente);
+            nuevaAsociacion.setSecretario(secretario);
+            nuevaAsociacion.setTesorero(tesorero);
+    
+            try {
+                if (listaAsociaciones.agregarAsociacion(nuevaAsociacion)) {
+                    System.out.println("Asociación añadida con éxito: " + nuevaAsociacion);
+                } else {
+                    System.out.println("Error: No se pudo añadir la asociación. La lista está llena.");
+                }
+            } catch (ExcepcionListaAsociacionLlena e) {
+                System.out.println("Error al añadir la asociación: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Error: Uno o más miembros con los alias proporcionados no existen.");
         }
-    } catch (ExcepcionListaAsociacionLlena e) {
-        System.out.println("Error al añadir la asociación: " + e.getMessage());
-    }finally {
-        scanner.close();
     }
-}
+    
 
 
     public static void opcio8 (ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango {
@@ -428,74 +453,68 @@ public static void opcio9(ListaAsociaciones listaAsociaciones) {
   
 
 public static void opcio10(ListaAcciones listaAcciones, ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango {
-    Scanner scanner = new Scanner(System.in); // Crear Scanner local
+    Scanner scanner = new Scanner(System.in); // Crear Scanner local sin cerrarlo
 
-    try {
-        System.out.println("Introduce los datos de la nueva demostración:");
+    System.out.println("Introduce los datos de la nueva demostración:");
 
-        System.out.print("Título de la demostración: ");
-        String titulo = scanner.nextLine();
+    System.out.print("Título de la demostración: ");
+    String titulo = scanner.nextLine();
 
-        System.out.print("Código de la demostración: ");
-        String codigo = scanner.nextLine();
+    System.out.print("Código de la demostración: ");
+    String codigo = scanner.nextLine();
 
-        System.out.print("Alias del miembro responsable: ");
-        String aliasResponsable = scanner.nextLine();
+    System.out.print("Alias del miembro responsable: ");
+    String aliasResponsable = scanner.nextLine();
 
-        Miembro responsable = null;
-        int i = 0;
+    Miembro responsable = null;
+    int i = 0;
 
-        // Buscar responsable en todas las asociaciones
-        while (i < listaAsociaciones.getNElem() && responsable == null) {
-            Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
-            responsable = asociacion.getMiembros().buscarMiembro(aliasResponsable);
-            i++;
-        }
+    // Buscar responsable en todas las asociaciones
+    while (i < listaAsociaciones.getNElem() && responsable == null) {
+        Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+        responsable = asociacion.getMiembros().buscarMiembro(aliasResponsable);
+        i++;
+    }
 
-        // Verificar si el responsable fue encontrado
-        boolean responsableEncontrado = responsable != null;
+    boolean responsableEncontrado = responsable != null;
 
-        System.out.print("Fecha de diseño (dd/MM/yyyy): ");
-        String fechaStr = scanner.nextLine();
-        Fecha fechaDiseño = Fecha.parse(fechaStr);
+    System.out.print("Fecha de diseño (dd/MM/yyyy): ");
+    String fechaStr = scanner.nextLine();
+    Fecha fechaDiseño = Fecha.parse(fechaStr);
 
-        System.out.print("Costo de materiales: ");
-        double costeMateriales = Double.parseDouble(scanner.nextLine());
+    System.out.print("Costo de materiales: ");
+    double costeMateriales = Double.parseDouble(scanner.nextLine());
 
-        // Crear la nueva demostración si el responsable fue encontrado
-        Demostracion nuevaDemostracion = null;
-        if (responsableEncontrado) {
-            nuevaDemostracion = new Demostracion(codigo, titulo, responsable, fechaDiseño, costeMateriales);
+    Demostracion nuevaDemostracion = null;
 
-            System.out.print("¿Está activa? (true/false): ");
-            boolean activa = Boolean.parseBoolean(scanner.nextLine());
-            nuevaDemostracion.setActiva(activa);
+    if (responsableEncontrado) {
+        nuevaDemostracion = new Demostracion(codigo, titulo, responsable, fechaDiseño, costeMateriales);
 
-            System.out.print("Número de veces ofrecida: ");
-            int vecesOfrecida = Integer.parseInt(scanner.nextLine());
-            nuevaDemostracion.setVecesOfrecida(vecesOfrecida);
-        }
+        System.out.print("¿Está activa? (true/false): ");
+        boolean activa = Boolean.parseBoolean(scanner.nextLine());
+        nuevaDemostracion.setActiva(activa);
 
-        // Agregar la demostración a la lista de acciones
-        boolean demostracionAñadida = false;
-        if (nuevaDemostracion != null) {
-            demostracionAñadida = ListaAcciones.agregarAccion(nuevaDemostracion);
-        }
+        System.out.print("Número de veces ofrecida: ");
+        int vecesOfrecida = Integer.parseInt(scanner.nextLine());
+        nuevaDemostracion.setVecesOfrecida(vecesOfrecida);
+    }
 
-        // Mensajes finales
-        if (!responsableEncontrado) {
-            System.out.println("Error: No se encontró ningún miembro con el alias proporcionado.");
-        } else if (!demostracionAñadida) {
-            System.out.println("Error: No se pudo añadir la demostración. La lista de acciones está llena.");
-        } else {
-            System.out.println("Demostración añadida con éxito:");
-            System.out.println(nuevaDemostracion);
-        }
-    } finally {
-        // Cerrar el Scanner para liberar recursos
-        scanner.close();
+    boolean demostracionAñadida = false;
+
+    if (nuevaDemostracion != null) {
+        demostracionAñadida = ListaAcciones.agregarAccion(nuevaDemostracion);
+    }
+
+    if (!responsableEncontrado) {
+        System.out.println("Error: No se encontró ningún miembro con el alias proporcionado.");
+    } else if (!demostracionAñadida) {
+        System.out.println("Error: No se pudo añadir la demostración. La lista de acciones está llena.");
+    } else {
+        System.out.println("Demostración añadida con éxito:");
+        System.out.println(nuevaDemostracion);
     }
 }
+
 
 
 
@@ -606,47 +625,43 @@ public static void opcio15() {
     
 
 public static void opcio16(ListaAcciones listaAcciones, ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango {
-    Scanner scanner = new Scanner(System.in); 
+    Scanner scanner = new Scanner(System.in); // Crear Scanner local sin cerrarlo
 
-    try {
-        System.out.print("Introduce el alias de la persona: ");
-        String alias = scanner.nextLine();
+    System.out.print("Introduce el alias de la persona: ");
+    String alias = scanner.nextLine();
 
-        Miembro miembro = null;
-        int i = 0;
+    Miembro miembro = null;
+    int i = 0;
 
-        // Buscar al miembro en todas las asociaciones
-        while (i < listaAsociaciones.getNElem() && miembro == null) {
-            Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
-            miembro = asociacion.getMiembros().buscarMiembro(alias);
-            i++;
-        }
+    // Buscar al miembro en todas las asociaciones
+    while (i < listaAsociaciones.getNElem() && miembro == null) {
+        Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+        miembro = asociacion.getMiembros().buscarMiembro(alias);
+        i++;
+    }
 
-        if (miembro == null) {
-            System.out.println("Error: No se encontró ninguna persona con el alias proporcionado.");
-        } else {
-            System.out.println("Charlas impartidas por: " + alias);
+    if (miembro == null) {
+        System.out.println("Error: No se encontró ninguna persona con el alias proporcionado.");
+    } else {
+        System.out.println("Charlas impartidas por: " + alias);
 
-            boolean charlasEncontradas = false;
+        boolean charlasEncontradas = false;
 
-            // Buscar charlas impartidas por el miembro
-            for (int j = 0; j < listaAcciones.getNElem(); j++) {
-                if (listaAcciones.obtenerAccion(j) instanceof Charla) {
-                    Charla charla = (Charla) listaAcciones.obtenerAccion(j);
+        // Buscar charlas impartidas por el miembro
+        for (int j = 0; j < listaAcciones.getNElem(); j++) {
+            if (listaAcciones.obtenerAccion(j) instanceof Charla) {
+                Charla charla = (Charla) listaAcciones.obtenerAccion(j);
 
-                    if (charla.getMiembrosImpartidores().buscarMiembro(alias) != null) {
-                        System.out.println(charla);
-                        charlasEncontradas = true;
-                    }
+                if (charla.getMiembrosImpartidores().buscarMiembro(alias) != null) {
+                    System.out.println(charla);
+                    charlasEncontradas = true;
                 }
             }
-
-            if (!charlasEncontradas) {
-                System.out.println("No se encontraron charlas impartidas por esta persona.");
-            }
         }
-    } finally {
-        scanner.close();
+
+        if (!charlasEncontradas) {
+            System.out.println("No se encontraron charlas impartidas por esta persona.");
+        }
     }
 }
 
