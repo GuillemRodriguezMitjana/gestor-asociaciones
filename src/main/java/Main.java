@@ -9,6 +9,7 @@ import datos.Miembro;
 import datos.Profesor;
 import excepciones.ExcepcionAsociacionNoEncontrada;
 import excepciones.ExcepcionIndiceFueraDeRango;
+import excepciones.ExcepcionListaAsociacionLlena;
 import excepciones.ExcepcionMaximoValoraciones;
 import listas.ListaMiembros;
 import listas.ListaAcciones;
@@ -30,13 +31,14 @@ public class Main {
     }   
     static Scanner teclat = new Scanner(System.in);
     public static void main(String[] args) throws ExcepcionAsociacionNoEncontrada, ExcepcionIndiceFueraDeRango{
+    
 
         ListaAsociaciones lista_associaciones = new ListaAsociaciones(50);
         // lista_associaciones.LlegirFitxer(); falta fer el serializable
         ListaAcciones lista_acciones = new ListaAcciones();
         lista_acciones.LlegirFitxer();
         ListaMiembros lista_miembros = new ListaMiembros();
-        lista_miembros.LlegirFitxer();
+        // lista_miembros.LlegitFitxer(); falta fer funcio
 
 
         // falta cargar datos desde ficheros
@@ -47,7 +49,7 @@ public class Main {
         while(opcio != 18){
             switch (opcio) {
                 case 1:
-                    opcio1();
+                    opcio1(lista_associaciones);
                     break;
                 case 2:
                     opcio2(lista_associaciones);
@@ -64,13 +66,12 @@ public class Main {
                     } catch (ExcepcionAsociacionNoEncontrada e) {
                         System.out.println("Error: " + e.getMessage());
                     }
-                    break;
-                
+                                
                 case 6:
                     opcio6(lista_acciones);
                     break;
                 case 7:
-                    opcio7();
+                    opcio7(lista_associaciones);
                     break;
                 case 8:
                     opcio8(lista_associaciones);
@@ -80,7 +81,7 @@ public class Main {
                     break;
                 
                 case 10:
-                    opcio10();
+                    opcio10(lista_acciones, lista_associaciones);
                     break;
                 case 11:
                     opcio11(lista_acciones);
@@ -115,7 +116,7 @@ public class Main {
                     }
                     break;
                 case 16:
-                    opcio16();
+                    opcio16(lista_acciones, lista_associaciones);
                     break;
                 case 17:
                     opcio17(lista_acciones);
@@ -151,7 +152,22 @@ public class Main {
         System.out.println("18. Sortir de l'aplicació.");
     }
 
-    public static void opcio1() {}
+    public static void opcio1(ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango {
+        if (listaAsociaciones.getNElem() == 0) {
+            System.out.println("No hay asociaciones registradas.");
+        } else {
+            System.out.println("Lista de Asociaciones:");
+            for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
+                if (i >= 0 && i < listaAsociaciones.getNElem()) { 
+                    System.out.println(listaAsociaciones.obtenerAsociacion(i));
+                } else {
+                    System.out.println("Índice fuera de rango: " + i);
+                }
+            }
+        }
+    }
+    
+    
 
     public static void opcio2(ListaAsociaciones listaAsociaciones) throws ExcepcionAsociacionNoEncontrada 
     {
@@ -199,7 +215,12 @@ public class Main {
         boolean miembrosEncontrados = false;
 
         for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
-            Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+            Asociacion asociacion = null;
+            try {
+                asociacion = listaAsociaciones.obtenerAsociacion(i);
+            } catch (ExcepcionIndiceFueraDeRango e) {
+                e.printStackTrace();
+            }
             ListaMiembros miembros = asociacion.getMiembros();
 
             for (int j = 0; j < miembros.getNElem(); j++) {
@@ -239,7 +260,11 @@ public class Main {
             System.out.println("Opció no vàlida.");
             return;
     }
-    ListaAcciones.mostrarAcciones(tipoFiltro);
+
+    // Para llamar a la función mostrarAcciones() debería de ser a una instancia y no a la clase directamente. 
+    //      Ejemplo: lista = new ListaAcciones();
+    //               lista.mostrarAcciones();
+    // ListaAcciones.mostrarAcciones(tipoFiltro);
 }
 
 
@@ -249,7 +274,8 @@ public static void opcio5(ListaAsociaciones listaAsociaciones) throws ExcepcionA
     String nombreAsociacion = teclat.nextLine();
 
     Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
-    ListaAcciones.mostrarAccionesPorAsociacion(asociacion);
+    // Lo mismo que está explicado en la 239
+    // ListaAcciones.mostrarAccionesPorAsociacion(asociacion);
 }
 
 
@@ -294,9 +320,34 @@ public static void opcio5(ListaAsociaciones listaAsociaciones) throws ExcepcionA
         }
     }
 
-    public static void opcio7() {}
+    public static void opcio7(ListaAsociaciones listaAsociaciones) {
+    Scanner scanner = new Scanner(System.in);
+
+    System.out.println("Introduce los datos de la nueva asociación:");
+
+    System.out.print("Nombre de la asociación: ");
+    String nombre = scanner.nextLine();
+
+    System.out.print("Correo de contacto: ");
+    String correo = scanner.nextLine();
+
+    System.out.print("Titulaciones (separadas por comas): ");
+    String[] titulaciones = scanner.nextLine().split(",");
+
+    Asociacion nuevaAsociacion = new Asociacion(nombre, correo, titulaciones);
+
+    try {
+        if (listaAsociaciones.agregarAsociacion(nuevaAsociacion)) {
+            System.out.println("Asociación añadida con éxito: " + nuevaAsociacion);
+        }
+    } catch (ExcepcionListaAsociacionLlena e) {
+        System.out.println("Error al añadir la asociación: " + e.getMessage());
+    }
+}
+
 
     public static void opcio8 (ListaAsociaciones listaAsociaciones) throws ExcepcionAsociacionNoEncontrada, ExcepcionIndiceFueraDeRango {
+    
         System.out.print("Introdueix el nom de l'associació: ");
         String nombreAsociacion = teclat.nextLine();
 
@@ -312,7 +363,12 @@ public static void opcio5(ListaAsociaciones listaAsociaciones) throws ExcepcionA
         Miembro miembro = null;
         int i = 0;
         while (miembro == null && i < listaAsociaciones.getNElem()) {
-            Asociacion assoc = listaAsociaciones.obtenerAsociacion(i);
+            Asociacion assoc = null;
+            try {
+                assoc = listaAsociaciones.obtenerAsociacion(i);
+            } catch (ExcepcionIndiceFueraDeRango e) {
+                e.printStackTrace();
+            }
             ListaMiembros miembros = assoc.getMiembros();
 
             int j = 0;
@@ -374,23 +430,74 @@ public static void opcio9(ListaAsociaciones listaAsociaciones) {
     System.out.print("Introdueix el nom de l'associació: ");
     String nombreAsociacion = teclat.nextLine();
 
-    try {
-        Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
-        if (asociacion == null) {
-            System.out.println("Associació no trobada.");
-            return;
-        }
-        ListaAcciones.agregarNuevaCharla(asociacion);
-    } catch (ExcepcionAsociacionNoEncontrada e) {
-        System.out.println("Error: " + e.getMessage());
+    Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
+    if (asociacion == null) {
+        System.out.println("Associació no trobada.");
+        return;
     }
+    ListaAcciones.agregarNuevaCharla(asociacion);
 }
 
 
 
   
 
-    public static void opcio10() {}
+public static void opcio10(ListaAcciones listaAcciones, ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango {
+    Scanner scanner = new Scanner(System.in);
+
+    System.out.println("Introduce los datos de la nueva demostración:");
+
+    System.out.print("Título de la demostración: ");
+    String titulo = scanner.nextLine();
+
+    System.out.print("Código de la demostración: ");
+    String codigo = scanner.nextLine();
+
+    System.out.print("Alias del miembro responsable: ");
+    String aliasResponsable = scanner.nextLine();
+
+    Miembro responsable = null;
+    for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
+        Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+        responsable = asociacion.getMiembros().buscarMiembro(aliasResponsable);
+        if (responsable != null) {
+            break; // Encontramos el miembro responsable, no necesitamos seguir buscando.
+        }
+    }
+
+    if (responsable == null) {
+        System.out.println("Error: No se encontró ningún miembro con el alias proporcionado.");
+        return;
+    }
+
+    System.out.print("Fecha de diseño (dd/MM/yyyy): ");
+    String fechaStr = scanner.nextLine();
+    Fecha fechaDiseño = Fecha.parse(fechaStr);
+
+    System.out.print("Costo de materiales: ");
+    double costeMateriales = Double.parseDouble(scanner.nextLine());
+
+    // Crear la nueva demostración
+    Demostracion nuevaDemostracion = new Demostracion(codigo, titulo, responsable, fechaDiseño, costeMateriales);
+
+    System.out.print("¿Está activa? (true/false): ");
+    boolean activa = Boolean.parseBoolean(scanner.nextLine());
+    nuevaDemostracion.setActiva(activa);
+
+    System.out.print("Número de veces ofrecida: ");
+    int vecesOfrecida = Integer.parseInt(scanner.nextLine());
+    nuevaDemostracion.setVecesOfrecida(vecesOfrecida);
+
+    // Agregar la demostración a la lista de acciones
+    if (listaAcciones.agregarAccion(nuevaDemostracion)) {
+        System.out.println("Demostración añadida con éxito:");
+        System.out.println(nuevaDemostracion);
+    } else {
+        System.out.println("Error: No se pudo añadir la demostración. La lista de acciones está llena.");
+    }
+}
+
+
 
     public static void opcio11(ListaAcciones listaAcciones) {
         System.out.println("Consultant demostracions no actives...\n");
@@ -434,7 +541,12 @@ public static void opcio9(ListaAsociaciones listaAsociaciones) {
         String fechaMasAntigua = null;
 
         for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
-            Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+            Asociacion asociacion = null;
+            try {
+                asociacion = listaAsociaciones.obtenerAsociacion(i);
+            } catch (ExcepcionIndiceFueraDeRango e) {
+                e.printStackTrace();
+            }
             ListaMiembros miembros = asociacion.getMiembros();
 
             for (int j = 0; j < miembros.getNElem(); j++) {
@@ -464,7 +576,8 @@ public static void opcio13() {
     System.out.print("Introdueix el nombre mínim d'assistents: ");
     int minAsistentes = Integer.parseInt(teclat.nextLine());
 
-    ListaAcciones.mostrarCharlasConMasAsistentes(minAsistentes);
+    // Lo mismo que está explicado en la 239
+   //  ListaAcciones.mostrarCharlasConMasAsistentes(minAsistentes);
 }
 
     
@@ -488,12 +601,56 @@ public static void opcio13() {
 
 
 public static void opcio15() {
-    ListaAcciones.mostrarCharlaMejorValorada();
+    // Lo mismo que está explicado en la 239
+    // ListaAcciones.mostrarCharlaMejorValorada();
 }
 
     
 
-    public static void opcio16() {}
+public static void opcio16(ListaAcciones listaAcciones, ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango {
+    Scanner scanner = new Scanner(System.in);
+
+    System.out.print("Introduce el alias de la persona: ");
+    String alias = scanner.nextLine();
+
+    Miembro miembro = null;
+
+    // Buscar al miembro en todas las asociaciones
+    for (int i = 0; i < listaAsociaciones.getNElem(); i++) {
+        Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+        miembro = asociacion.getMiembros().buscarMiembro(alias);
+        if (miembro != null) {
+            break; // Si se encuentra el miembro, no necesitamos seguir buscando
+        }
+    }
+
+    if (miembro == null) {
+        System.out.println("Error: No se encontró ninguna persona con el alias proporcionado.");
+        return;
+    }
+
+    System.out.println("Charlas impartidas por: " + alias);
+
+    boolean charlasEncontradas = false;
+
+    
+    for (int i = 0; i < listaAcciones.getNElem(); i++) {
+        if (listaAcciones.obtenerAccion(i) instanceof Charla) {
+            Charla charla = (Charla) listaAcciones.obtenerAccion(i);
+
+            
+            if (charla.getMiembrosImpartidores().buscarMiembro(alias) != null) {
+                System.out.println(charla);
+                charlasEncontradas = true;
+            }
+        }
+    }
+
+    if (!charlasEncontradas) {
+        System.out.println("No se encontraron charlas impartidas por esta persona.");
+    }
+}
+
 
     public static void opcio17(ListaAcciones listaAcciones) {
         System.out.println("Donar de baixa demostracions no actives dissenyades abans d'una data específica.\n");
