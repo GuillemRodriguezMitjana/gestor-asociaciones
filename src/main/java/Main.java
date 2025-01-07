@@ -230,17 +230,14 @@ public class Main {
 
 
 
-public static void opcio5(ListaAsociaciones listaAsociaciones) {
+public static void opcio5(ListaAsociaciones listaAsociaciones) throws ExcepcionAsociacionNoEncontrada {
     System.out.print("Introdueix el nom de l'associació: ");
     String nombreAsociacion = teclat.nextLine();
 
     Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
-    if (asociacion != null) {
-        ListaAcciones.mostrarAccionesPorAsociacion(asociacion);
-    } else {
-        System.out.println("Associació no trobada.");
-    }
+    ListaAcciones.mostrarAccionesPorAsociacion(asociacion);
 }
+
 
     
 
