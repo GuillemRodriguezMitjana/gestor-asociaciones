@@ -14,6 +14,7 @@ import datos.Charla;
 import datos.Demostracion;
 import datos.Fecha;
 import datos.Miembro;
+import excepciones.ExcepcionMaximoValoraciones;
 
 public class ListaAcciones {
     private static  Accion[] lista;
@@ -85,32 +86,94 @@ public class ListaAcciones {
             
             System.out.print("Título de la charla: ");
             String titulo = scanner.nextLine();
-    
+        
             System.out.print("Fecha de la charla (dd/mm/yyyy): ");
             String fecha1 = scanner.nextLine();
             Fecha fecha = Fecha.parse(fecha1);
-    
-    
+        
             System.out.print("Responsable (alias): ");
             String responsableAlias = scanner.nextLine();
             Miembro responsable = asociacion.getMiembros().buscarMiembro(responsableAlias);
-            scanner.close();
             if (responsable == null) {
                 System.out.println("Responsable no encontrado en la asociación.");
-                return;
             }
-    
-            // Generar código (3 primeras letras + número secuencial)
+        
             String codigo = asociacion.getName().substring(0, 3).toUpperCase() + (nElem + 100);
-    
-            // Crear la nueva charla y añadirla
+        
             Charla nuevaCharla = new Charla(codigo, titulo, responsable, fecha);
+        
+            nuevaCharla.agregarImpartidor(responsable);
+        
+            System.out.print("Número de asistentes a la charla: ");
+            int numAsistentes = Integer.parseInt(scanner.nextLine());
+            for (int i = 0; i < numAsistentes; i++) {
+                nuevaCharla.incrementarAsistentes();
+            }
+        
+            System.out.println("Introduce las valoraciones de los asistentes (entre 0 y 10):");
+            for (int i = 0; i < numAsistentes; i++) {
+                System.out.print("Valoración del asistente " + (i + 1) + ": ");
+                int valoracion = Integer.parseInt(scanner.nextLine());
+                try {
+                    nuevaCharla.agregarValoracion(valoracion);
+                } catch (ExcepcionMaximoValoraciones e) {
+                    System.out.println("Error al añadir valoración: " + e.getMessage());
+                }
+            }
+        
             if (agregarAccion(nuevaCharla)) {
-            System.out.println("Charla añadida con éxito: " + nuevaCharla);
-        } else {
-            System.out.println("Error: No se pudo añadir la charla.");
+                System.out.println("Charla añadida con éxito: " + nuevaCharla);
+            } else {
+                System.out.println("Error: No se pudo añadir la charla.");
+            }
         }
-    }
+        
+
+
+        public static void agregarNuevaDemostracion(Asociacion asociacion) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Añadir nueva demostración para la asociación: " + asociacion.getName());
+        
+            System.out.print("Título de la demostración: ");
+            String titulo = scanner.nextLine();
+        
+            System.out.print("Fecha de diseño (dd/mm/yyyy): ");
+            String fechaStr = scanner.nextLine();
+            Fecha fechaDiseño = Fecha.parse(fechaStr);
+        
+            System.out.print("Responsable (alias): ");
+            String responsableAlias = scanner.nextLine();
+            Miembro responsable = asociacion.getMiembros().buscarMiembro(responsableAlias);
+        
+            if (responsable == null) {
+                System.out.println("Responsable no encontrado en la asociación.");
+            }
+        
+            System.out.print("Costo de los materiales: ");
+            double costeMateriales = Double.parseDouble(scanner.nextLine());
+        
+            String codigo = asociacion.getName().substring(0, 3).toUpperCase() + (nElem + 200);
+        
+            Demostracion nuevaDemostracion = new Demostracion(codigo, titulo, responsable, fechaDiseño, costeMateriales);
+        
+            System.out.print("¿Está activa? (true/false): ");
+            boolean activa = Boolean.parseBoolean(scanner.nextLine());
+            nuevaDemostracion.setActiva(activa);
+        
+            System.out.print("Número de veces ofrecida: ");
+            int vecesOfrecida = Integer.parseInt(scanner.nextLine());
+            nuevaDemostracion.setVecesOfrecida(vecesOfrecida);
+        
+            nuevaDemostracion.setResponsable(responsable);
+        
+            if (agregarAccion(nuevaDemostracion)) {
+                System.out.println("Demostración añadida con éxito: " + nuevaDemostracion);
+            } else {
+                System.out.println("Error: No se pudo añadir la demostración.");
+            }
+        }
+        
+    
 
     // Nuevo método: Mostrar charlas con más asistentes que un número indicado
     public static void mostrarCharlasConMasAsistentes(int minimoAsistentes) {
