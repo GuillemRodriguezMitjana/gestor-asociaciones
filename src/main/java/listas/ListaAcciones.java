@@ -2,7 +2,6 @@ package listas;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -72,7 +71,8 @@ public class ListaAcciones {
         public static void mostrarAccionesPorAsociacion(Asociacion asociacion) {
             if (asociacion != null) {
                 System.out.println("Acciones de la asociación: " + asociacion.getName());
-                asociacion.getAcciones().mostrarAcciones("");
+                asociacion.getAcciones();
+                ListaAcciones.mostrarAcciones("");
             } else {
                 System.out.println("La asociación no existe o no tiene acciones registradas.");
             }
@@ -191,8 +191,7 @@ public class ListaAcciones {
                         charla.incrementarAsistentes();
                     }
     
-                    System.out.println("Charla creada: " + charla);
-                    this.agregarAccion(charla);
+                    ListaAcciones.agregarAccion(charla);
                 } else if (tipo.equalsIgnoreCase("Demostracion")) {
                     // Similar lógica para demostraciones
                     String fechaStr = coma.nextToken();
@@ -205,17 +204,13 @@ public class ListaAcciones {
                     demostracion.setActiva(esValida);
                     demostracion.setVecesOfrecida(vecesOfrecida);
     
-                    System.out.println("Demostración creada: " + demostracion);
-                    this.agregarAccion(demostracion);
-                } else {
-                    System.out.println("Tipo de acción desconocido: " + tipo);
-                }
-    
+                    ListaAcciones.agregarAccion(demostracion);
+                } 
                 linea = f.readLine();
             }
             f.close();
         } catch (Exception e) {
-            System.out.println("Error al leer el archivo: " + e.getMessage());
+            System.out.println("");
         }
     }
     

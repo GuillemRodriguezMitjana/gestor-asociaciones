@@ -48,8 +48,7 @@ public class ListaMiembros {
         return nElem;
     }
     public void LlegirFitxer() {
-        try {
-            BufferedReader f = new BufferedReader(new FileReader("miembros.txt"));
+        try (BufferedReader f = new BufferedReader(new FileReader("miembros.txt"))) {
             String linea = f.readLine();
             while (linea != null) {
                 String[] partes = linea.split(";");
@@ -91,11 +90,11 @@ public class ListaMiembros {
                 this.agregarMiembro(miembro);
                 linea = f.readLine();
             }
-            f.close();
         } catch (Exception e) {
-            System.out.println("Error al leer el archivo: " + e.getMessage());
+            System.out.println("S'ha produit un error en els arxius: ");
         }
     }
+    
     
     public void EscriureFitxer(String nombreArchivo) {
         try (BufferedWriter f = new BufferedWriter(new FileWriter(nombreArchivo))) {

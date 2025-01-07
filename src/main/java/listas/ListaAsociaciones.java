@@ -1,17 +1,18 @@
 package listas;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+
 import java.io.Serializable;
-import java.util.Scanner;
-import java.util.StringTokenizer;
+import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.FileNotFoundException;
+import java.io.EOFException;
 
 import datos.Asociacion;
-import datos.Accion;
-import datos.Charla;
-import datos.Demostracion;
-import datos.Fecha;
-import excepciones.*;
+import excepciones.ExcepcionIndiceFueraDeRango;
+import excepciones.ExcepcionListaAsociacionLlena;
 
 public class ListaAsociaciones implements Serializable{
 
@@ -66,79 +67,34 @@ public class ListaAsociaciones implements Serializable{
         resultado += "]";
         return resultado;
     }
-    
-
-
-    // Métodos añadidos por tu compañero
-    public void mostrarAssociacions() {
-        if (nElem == 0) {
-            System.out.println("No hay asociaciones registradas.");
-        } else {
-            System.out.println("Lista de Asociaciones:");
+    public void guardarDatos(String filename) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             for (int i = 0; i < nElem; i++) {
-                System.out.println(lista[i]);
+                oos.writeObject(lista[i]);
             }
+        } catch (IOException e) {
+            System.out.println("Error al guardar los datos: " + e.getMessage());
         }
-    }
-
-    public void agregarNuevaAsociacion() {
-        Scanner scanner = new Scanner(System.in);
-        
-        System.out.println("Introduce los datos de la nueva asociación:");
-        
-        System.out.print("Nombre de la asociación: ");
-        String nombre = scanner.nextLine();
-        
-        System.out.print("Correo de contacto: ");
-        String correo = scanner.nextLine();
-        
-        System.out.print("Titulaciones (separadas por comas): ");
-        String[] titulaciones = scanner.nextLine().split(",");
-        
-        Asociacion nuevaAsociacion = new Asociacion(nombre, correo, titulaciones);
-        
-        try {
-            if (agregarAsociacion(nuevaAsociacion)) {
-                System.out.println("Asociación añadida con éxito: " + nuevaAsociacion);
-            }
-        } catch (ExcepcionListaAsociacionLlena e) {
-            System.out.println("Error al añadir la asociación: " + e.getMessage());
-        }
-        scanner.close();
     }
     
-
-    public void mostrarCharlasPorMiembro(String alias) {
-        boolean encontrado = false;
-        
-        for (int i = 0; i < nElem; i++) {
-            Asociacion asociacion = lista[i];
-            
-            for (int j = 0; j < asociacion.getAcciones().getNElem(); j++) {
-                Accion accion = asociacion.getAcciones().obtenerAccion(j);
-                
-                if (accion instanceof Charla) {
-                    Charla charla = (Charla) accion;
-                    if (charla.getResponsable().getAlias().equalsIgnoreCase(alias)) {
-                        System.out.println("Charla encontrada en la asociación " + asociacion.getName() + ": " + charla);
-                        encontrado = true;
-                    }
+    public void cargarDatos(String filename) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+            boolean finArchivo = false;
+            while (!finArchivo) {
+                try {
+                    Asociacion asociacion = (Asociacion) ois.readObject();
+                    agregarAsociacion(asociacion);
+                } catch (EOFException e) {
+                    finArchivo = true;
+                } catch (ExcepcionListaAsociacionLlena e) {
+                    System.out.println("La lista está llena: " + e.getMessage());
+                    break;
                 }
             }
-        }
-        
-        if (!encontrado) {
-            System.out.println("No se encontraron charlas para el miembro con alias: " + alias);
-        }
+            System.out.println("Datos cargados correctamente desde " + filename);
+        } catch (FileNotFoundException e) {
+            System.out.println("El archivo " + filename + " no existe.");
+        } 
     }
-
-    public void salirAplicacion() {
-        System.out.println("¡Gracias por usar la aplicación! Cerrando...");
-        System.exit(0);
-    }
-
-    public void LlegirFitxer() {
-        
-    }
-
 }
+

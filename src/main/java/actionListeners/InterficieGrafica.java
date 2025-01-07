@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import listas.ListaAcciones;
 import listas.ListaAsociaciones;
 import datos.Demostracion;
@@ -101,22 +100,30 @@ public class InterficieGrafica extends JFrame {
     private class MostrarDemostracionesListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            modeloLista.clear();
+            modeloLista.clear(); 
             String seleccionFiltro = (String) filtroAsociaciones.getSelectedItem();
-
+    
             for (int i = 0; i < listaAcciones.getNElem(); i++) {
                 if (listaAcciones.obtenerAccion(i) instanceof Demostracion) {
                     Demostracion demo = (Demostracion) listaAcciones.obtenerAccion(i);
-
-                    /*
-                    if (demo.isActiva() && ("Todas".equals(seleccionFiltro) ||
-                        seleccionFiltro.equals(demo.getAsociacion().getName()))) {
-                        modeloLista.addElement(demo.getCodigo() + " - " + demo.getTitulo());
-                    }*/
+    
+                    // Comprobar si la demostración es activa
+                    if (demo.isActiva()) {
+                        // Si se selecciona "Todas" o la demostración pertenece a la asociación seleccionada
+                        if ("Todas".equals(seleccionFiltro) || 
+                            (demo.getAsociacion() != null && seleccionFiltro.equals(demo.getAsociacion().getName()))) {
+                            modeloLista.addElement(demo.getCodigo() + " - " + demo.getTitulo());
+                        }
+                    }
                 }
+            }
+    
+            if (modeloLista.isEmpty()) {
+                JOptionPane.showMessageDialog(panelFiltro, "No se encontraron demostraciones activas para el filtro seleccionado.");
             }
         }
     }
+    
 
     public static void main(String[] args) {
         
@@ -124,7 +131,7 @@ public class InterficieGrafica extends JFrame {
         acciones.LlegirFitxer();
 
         ListaAsociaciones asociaciones = new ListaAsociaciones(50);
-        asociaciones.LlegirFitxer();
+        asociaciones.guardarDatos("asociaciones.ser");
 
         new InterficieGrafica("Gestor de Demostracions", acciones, asociaciones);
     }
