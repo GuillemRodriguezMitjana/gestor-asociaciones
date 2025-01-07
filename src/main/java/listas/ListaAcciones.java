@@ -17,8 +17,8 @@ import datos.Fecha;
 import datos.Miembro;
 
 public class ListaAcciones {
-    private Accion[] lista;
-    private int nElem;
+    private static  Accion[] lista;
+    private static int nElem;
 
     public ListaAcciones() {
         lista = new Accion[100]; // Tamaño fijo inicial
@@ -130,7 +130,7 @@ public class ListaAcciones {
     }
 
     // Nuevo método: Mostrar la charla mejor valorada
-    public void mostrarCharlaMejorValorada() {
+    public static void mostrarCharlaMejorValorada() {
         Charla mejorCharla = null;
         double mejorValoracion = 0;
         int maxValoraciones = 0;
