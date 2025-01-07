@@ -16,72 +16,98 @@ import datos.Fecha;
 import datos.Miembro;
 import excepciones.ExcepcionMaximoValoraciones;
 
+
 public class ListaAcciones {
-    private static  Accion[] lista;
+    private static Accion[] lista;
     private static int nElem;
 
+    /**
+     * Constructor que inicializa la lista de acciones con un tamaño fijo de 100 elementos.
+     */
     public ListaAcciones() {
         lista = new Accion[100]; // Tamaño fijo inicial
         nElem = 0;
     }
 
+    /**
+     * Agrega una nueva acción a la lista.
+     * @param accion La acción a agregar.
+     * @return true si la acción se agregó correctamente, false si la lista está llena.
+     */
     public static boolean agregarAccion(Accion accion) {
-            if (nElem < lista.length) {
-                lista[nElem++] = accion;
-                return true;
-            }
-            return false;
+        if (nElem < lista.length) {
+            lista[nElem++] = accion;
+            return true;
         }
-    
-        public Accion obtenerAccion(int index) {
-            if (index >= 0 && index < nElem) {
-                return lista[index];
-            }
-            return null;
+        return false;
+    }
+
+    /**
+     * Obtiene una acción de la lista dado su índice.
+     * @param index El índice de la acción.
+     * @return La acción en el índice dado, o null si el índice es inválido.
+     */
+    public Accion obtenerAccion(int index) {
+        if (index >= 0 && index < nElem) {
+            return lista[index];
         }
-    
-        public int getNElem() {
-            return nElem;
-        }
-    
-    
-        // Método para mostrar todas las acciones con filtro opcional
-        public static void mostrarAcciones(String tipoFiltro) {
-            boolean encontrado = false;
-            for (int i = 0; i < nElem; i++) {
-                Accion accion = lista[i];
-                if (tipoFiltro == null || tipoFiltro.isEmpty()) {
+        return null;
+    }
+
+    /**
+     * Obtiene el número de elementos en la lista.
+     * @return El número de elementos en la lista.
+     */
+    public int getNElem() {
+        return nElem;
+    }
+
+    /**
+     * Muestra todas las acciones, opcionalmente filtradas por tipo (charla o demostración).
+     * @param tipoFiltro El tipo de acción a mostrar ("charla" o "demostracion"). Si es null o vacío, muestra todas.
+     */
+    public static void mostrarAcciones(String tipoFiltro) {
+        boolean encontrado = false;
+        for (int i = 0; i < nElem; i++) {
+            Accion accion = lista[i];
+            if (tipoFiltro == null || tipoFiltro.isEmpty()) {
+                System.out.println(accion);
+                encontrado = true;
+            } else {
+                if (tipoFiltro.equalsIgnoreCase("charla") && accion instanceof datos.Charla) {
                     System.out.println(accion);
                     encontrado = true;
-                } else {
-                    if (tipoFiltro.equalsIgnoreCase("charla") && accion instanceof datos.Charla) {
-                        System.out.println(accion);
-                        encontrado = true;
-                    } else if (tipoFiltro.equalsIgnoreCase("demostracion") && accion instanceof datos.Demostracion) {
-                        System.out.println(accion);
-                        encontrado = true;
-                    }
+                } else if (tipoFiltro.equalsIgnoreCase("demostracion") && accion instanceof datos.Demostracion) {
+                    System.out.println(accion);
+                    encontrado = true;
                 }
             }
-            if (!encontrado) {
-                System.out.println("No se encontraron acciones del tipo: " + tipoFiltro);
-            }
         }
-    
-        // Nuevo método: mostrar acciones de una asociación específica
-        public static void mostrarAccionesPorAsociacion(Asociacion asociacion) {
-            if (asociacion != null) {
-                System.out.println("Acciones de la asociación: " + asociacion.getName());
-                asociacion.getAcciones();
-                ListaAcciones.mostrarAcciones("");
-            } else {
-                System.out.println("La asociación no existe o no tiene acciones registradas.");
-            }
+        if (!encontrado) {
+            System.out.println("No se encontraron acciones del tipo: " + tipoFiltro);
         }
-    
-        // Nuevo método: añadir una nueva charla
-        public static void agregarNuevaCharla(Asociacion asociacion) {
-            Scanner scanner = new Scanner(System.in);
+    }
+
+    /**
+     * Muestra las acciones asociadas a una asociación específica.
+     * @param asociacion La asociación cuyas acciones se desean mostrar.
+     */
+    public static void mostrarAccionesPorAsociacion(Asociacion asociacion) {
+        if (asociacion != null) {
+            System.out.println("Acciones de la asociación: " + asociacion.getName());
+            asociacion.getAcciones();
+            ListaAcciones.mostrarAcciones("");
+        } else {
+            System.out.println("La asociación no existe o no tiene acciones registradas.");
+        }
+    }
+
+    /**
+     * Agrega una nueva charla asociada a una asociación.
+     * @param asociacion La asociación a la que pertenece la nueva charla.
+     */
+    public static void agregarNuevaCharla(Asociacion asociacion) {
+        try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Añadir nueva charla para la asociación: " + asociacion.getName());
             
             System.out.print("Título de la charla: ");
@@ -127,11 +153,14 @@ public class ListaAcciones {
                 System.out.println("Error: No se pudo añadir la charla.");
             }
         }
-        
+    }
 
-
-        public static void agregarNuevaDemostracion(Asociacion asociacion) {
-            Scanner scanner = new Scanner(System.in);
+    /**
+     * Agrega una nueva demostración asociada a una asociación.
+     * @param asociacion La asociación a la que pertenece la nueva demostración.
+     */
+    public static void agregarNuevaDemostracion(Asociacion asociacion) {
+        try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Añadir nueva demostración para la asociación: " + asociacion.getName());
         
             System.out.print("Título de la demostración: ");
@@ -172,10 +201,12 @@ public class ListaAcciones {
                 System.out.println("Error: No se pudo añadir la demostración.");
             }
         }
-        
-    
+    }
 
-    // Nuevo método: Mostrar charlas con más asistentes que un número indicado
+    /**
+     * Muestra las charlas que tienen más asistentes que un número mínimo especificado.
+     * @param minimoAsistentes Número mínimo de asistentes para mostrar la charla.
+     */
     public static void mostrarCharlasConMasAsistentes(int minimoAsistentes) {
         boolean encontrado = false;
         for (int i = 0; i < nElem; i++) {
@@ -192,7 +223,9 @@ public class ListaAcciones {
         }
     }
 
-    // Nuevo método: Mostrar la charla mejor valorada
+    /**
+     * Muestra la charla mejor valorada según el promedio de sus valoraciones.
+     */
     public static void mostrarCharlaMejorValorada() {
         Charla mejorCharla = null;
         double mejorValoracion = 0;
@@ -219,41 +252,42 @@ public class ListaAcciones {
         }
     }
 
-
-
+    /**
+     * Lee las acciones desde un archivo de texto y las agrega a la lista.
+     */
     public void LlegirFitxer() {
         try {
             BufferedReader f = new BufferedReader(new FileReader("acciones.txt"));
             String linea = f.readLine();
             while (linea != null) {
                 StringTokenizer coma = new StringTokenizer(linea, ";");
-    
+
                 String tipo = coma.nextToken();
                 String codigo = coma.nextToken();
                 String titulo = coma.nextToken();
-    
+
                 if (tipo.equalsIgnoreCase("Charla")) {
                     String fechaStr = coma.nextToken();
                     Fecha fecha = Fecha.parse(fechaStr);
                     String impartidor = coma.nextToken();
                     int numAsistentes = Integer.parseInt(coma.nextToken());
-    
+
                     // Crear charla
                     Charla charla = new Charla(codigo, titulo, null, fecha);
-    
+
                     // Procesar valoraciones
                     if (coma.hasMoreTokens()) {
                         String[] valoracionesStr = coma.nextToken().split(",");
                         for (int i = 0; i < valoracionesStr.length; i++) {
                             int valoracion = Integer.parseInt(valoracionesStr[i].trim());
                             charla.agregarValoracion(valoracion);
+                        }
                     }
-                }
-    
+
                     for (int i = 0; i < numAsistentes; i++) {
                         charla.incrementarAsistentes();
                     }
-    
+
                     ListaAcciones.agregarAccion(charla);
                 } else if (tipo.equalsIgnoreCase("Demostracion")) {
                     // Similar lógica para demostraciones
@@ -262,11 +296,11 @@ public class ListaAcciones {
                     boolean esValida = Boolean.parseBoolean(coma.nextToken());
                     int vecesOfrecida = Integer.parseInt(coma.nextToken());
                     double costoMateriales = Double.parseDouble(coma.nextToken());
-    
+
                     Demostracion demostracion = new Demostracion(codigo, titulo, null, fechaDisenyo, costoMateriales);
                     demostracion.setActiva(esValida);
                     demostracion.setVecesOfrecida(vecesOfrecida);
-    
+
                     ListaAcciones.agregarAccion(demostracion);
                 } 
                 linea = f.readLine();
@@ -276,7 +310,10 @@ public class ListaAcciones {
             System.out.println("");
         }
     }
-    
+
+    /**
+     * Escribe las acciones de la lista en un archivo de texto.
+     */
     public void EscriureFitxer() {
         try {
             BufferedWriter f = new BufferedWriter(new FileWriter("acciones.txt"));
@@ -316,6 +353,11 @@ public class ListaAcciones {
         }
     }
 
+    /**
+     * Busca una acción por su código.
+     * @param codigo El código de la acción.
+     * @return La acción correspondiente al código, o null si no se encuentra.
+     */
     public Accion buscarAccionPorCodigo(String codigo) {
         for (int i = 0; i < nElem; i++) {
             if (lista[i].getCodigo().equals(codigo)) {
@@ -325,6 +367,10 @@ public class ListaAcciones {
         return null;
     }
 
+    /**
+     * Elimina una acción de la lista dado su índice.
+     * @param index El índice de la acción a eliminar.
+     */
     public void eliminarAccion(int index) {
         if (index >= 0 && index < nElem) {
             for (int i = index; i < nElem - 1; i++) {
@@ -334,17 +380,18 @@ public class ListaAcciones {
             nElem--;
         }
     }
-    
 
+    /**
+     * Devuelve un String.
+     * @return Una cadena con la lista de acciones.
+     */
     @Override
-public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("Lista de Acciones:\n");
-    for (int i = 0; i < nElem; i++) {
-        sb.append(lista[i].toString()).append("\n");
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Lista de Acciones:\n");
+        for (int i = 0; i < nElem; i++) {
+            sb.append(lista[i].toString()).append("\n");
+        }
+        return sb.toString();
     }
-    return sb.toString();
-}
-
-
 }

@@ -264,7 +264,6 @@ public class Main {
                 return; // Salimos del método si la opción no es válida
         }
     
-        // Llamada al método mostrarAcciones desde la instancia de listaAcciones
         listaAcciones.mostrarAcciones(tipoFiltro);
     }
     
