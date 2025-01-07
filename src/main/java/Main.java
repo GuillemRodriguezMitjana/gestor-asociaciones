@@ -652,8 +652,6 @@ public static void opcio16(ListaAcciones listaAcciones, ListaAsociaciones listaA
     }
 }
 
-
-
     public static void opcio17(ListaAcciones listaAcciones) {
         System.out.println("Donar de baixa demostracions no actives dissenyades abans d'una data específica.\n");
         System.out.print("Introdueix la data límit (dd/MM/yyyy): ");
