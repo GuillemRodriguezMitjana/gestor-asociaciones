@@ -1,5 +1,6 @@
 package listas;
 
+
 import java.io.Serializable;
 import java.io.IOException;
 import java.io.FileOutputStream;
@@ -71,13 +72,12 @@ public class ListaAsociaciones implements Serializable{
             for (int i = 0; i < nElem; i++) {
                 oos.writeObject(lista[i]);
             }
-            System.out.println("Datos guardados correctamente en " + filename);
         } catch (IOException e) {
             System.out.println("Error al guardar los datos: " + e.getMessage());
         }
     }
     
-    public void cargarDatos(String filename) {
+    public void cargarDatos(String filename) throws IOException, ClassNotFoundException {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
             boolean finArchivo = false;
             while (!finArchivo) {
@@ -94,9 +94,7 @@ public class ListaAsociaciones implements Serializable{
             System.out.println("Datos cargados correctamente desde " + filename);
         } catch (FileNotFoundException e) {
             System.out.println("El archivo " + filename + " no existe.");
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error al cargar los datos: " + e.getMessage());
-        }
+        } 
     }
 }
 

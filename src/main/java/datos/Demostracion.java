@@ -1,14 +1,13 @@
 package datos;
 
 
-
-
 public class Demostracion extends Accion {
 
     private Fecha fechaDiseño;
     private boolean activa;
     private int vecesOfrecida;
     private double costeMateriales;
+    private Asociacion asociacion;
 
     // Constructor
     public Demostracion(String codigo, String titulo, Miembro responsable, Fecha fechaDiseño, double costeMateriales) {
@@ -17,6 +16,14 @@ public class Demostracion extends Accion {
         this.activa = true;
         this.vecesOfrecida = 0;
         this.costeMateriales = costeMateriales;
+    }
+
+    public Asociacion getAsociacion() {
+        return asociacion;
+    }
+    
+    public void setAsociacion(Asociacion asociacion) {
+        this.asociacion = asociacion;
     }
 
     public void ofrecerDemostracion() {
