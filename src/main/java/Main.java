@@ -579,11 +579,11 @@ public static void opcio11(ListaAcciones listaAcciones) {
     }
 
 
-public static void opcio13() {
+    public static void opcio13() {
     System.out.print("Introdueix el nombre mínim d'assistents: ");
     int minAsistentes = Integer.parseInt(teclat.nextLine());
    ListaAcciones.mostrarCharlasConMasAsistentes(minAsistentes);
-}
+    }
 
     
 
@@ -605,54 +605,52 @@ public static void opcio13() {
     }
 
 
-public static void opcio15() {
+    public static void opcio15() {
     ListaAcciones.mostrarCharlaMejorValorada();
-}
+    }
 
     
 
-public static void opcio16(ListaAcciones listaAcciones, ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango {
+    public static void opcio16(ListaAcciones listaAcciones, ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango {
     Scanner scanner = new Scanner(System.in); // Crear Scanner local sin cerrarlo
 
-    System.out.print("Introduce el alias de la persona: ");
-    String alias = scanner.nextLine();
+        System.out.print("Introduce el alias de la persona: ");
+        String alias = scanner.nextLine();
 
-    Miembro miembro = null;
-    int i = 0;
+        Miembro miembro = null;
+        int i = 0;
 
-    // Buscar al miembro en todas las asociaciones
-    while (i < listaAsociaciones.getNElem() && miembro == null) {
-        Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
-        miembro = asociacion.getMiembros().buscarMiembro(alias);
-        i++;
-    }
+        // Buscar al miembro en todas las asociaciones
+        while (i < listaAsociaciones.getNElem() && miembro == null) {
+            Asociacion asociacion = listaAsociaciones.obtenerAsociacion(i);
+            miembro = asociacion.getMiembros().buscarMiembro(alias);
+            i++;
+        }
 
-    if (miembro == null) {
-        System.out.println("Error: No se encontró ninguna persona con el alias proporcionado.");
-    } else {
-        System.out.println("Charlas impartidas por: " + alias);
+        if (miembro == null) {
+            System.out.println("Error: No se encontró ninguna persona con el alias proporcionado.");
+        } else {
+            System.out.println("Charlas impartidas por: " + alias);
 
-        boolean charlasEncontradas = false;
+            boolean charlasEncontradas = false;
 
-        // Buscar charlas impartidas por el miembro
-        for (int j = 0; j < listaAcciones.getNElem(); j++) {
-            if (listaAcciones.obtenerAccion(j) instanceof Charla) {
-                Charla charla = (Charla) listaAcciones.obtenerAccion(j);
+            // Buscar charlas impartidas por el miembro
+            for (int j = 0; j < listaAcciones.getNElem(); j++) {
+                if (listaAcciones.obtenerAccion(j) instanceof Charla) {
+                    Charla charla = (Charla) listaAcciones.obtenerAccion(j);
 
-                if (charla.getMiembrosImpartidores().buscarMiembro(alias) != null) {
-                    System.out.println(charla);
-                    charlasEncontradas = true;
+                    if (charla.getMiembrosImpartidores().buscarMiembro(alias) != null) {
+                        System.out.println(charla);
+                        charlasEncontradas = true;
+                    }
                 }
             }
-        }
 
-        if (!charlasEncontradas) {
-            System.out.println("No se encontraron charlas impartidas por esta persona.");
+            if (!charlasEncontradas) {
+                System.out.println("No se encontraron charlas impartidas por esta persona.");
+            }
         }
     }
-}
-
-
 
     public static void opcio17(ListaAcciones listaAcciones) {
         System.out.println("Donar de baixa demostracions no actives dissenyades abans d'una data específica.\n");
@@ -699,30 +697,30 @@ public static void opcio16(ListaAcciones listaAcciones, ListaAsociaciones listaA
     {
         System.out.println("Guardando datos antes de salir...");
     
-    // Guardar lista de asociaciones
-    try {
-        listaAsociaciones.guardarDatos("asociaciones.ser");
-        System.out.println("Asociaciones guardadas correctamente.");
-    } catch (Exception e) {
-        System.out.println("Error al guardar asociaciones: " + e.getMessage());
-    }
-    // Guardar lista de acciones
-    try {
-        listaAcciones.LlegirFitxer();
-        System.out.println("Acciones guardadas correctamente.");
-    } catch (Exception e) {
-        System.out.println("Error al guardar acciones: " + e.getMessage());
-    }
+        // Guardar lista de asociaciones
+        try {
+            listaAsociaciones.guardarDatos("asociaciones.ser");
+            System.out.println("Asociaciones guardadas correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al guardar asociaciones: " + e.getMessage());
+        }
+        // Guardar lista de acciones
+        try {
+            listaAcciones.LlegirFitxer();
+            System.out.println("Acciones guardadas correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al guardar acciones: " + e.getMessage());
+        }
 
-    // Guardar lista de miembros
-    try {
-        listaMiembros.EscriureFitxer("miembros.txt");
-        System.out.println("Miembros guardados correctamente.");
-    } catch (Exception e) {
-        System.out.println("Error al guardar miembros: " + e.getMessage());
-    }
+        // Guardar lista de miembros
+        try {
+            listaMiembros.EscriureFitxer("miembros.txt");
+            System.out.println("Miembros guardados correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al guardar miembros: " + e.getMessage());
+        }
 
-    System.out.println("Datos guardados correctamente. Saliendo del programa.");
+        System.out.println("Datos guardados correctamente. Saliendo del programa.");
+    }
 }
-    }
 
