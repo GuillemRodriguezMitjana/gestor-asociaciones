@@ -33,7 +33,7 @@ public class Main {
     public static void main(String[] args) throws ExcepcionIndiceFueraDeRango, ExcepcionAsociacionNoEncontrada{
 
         ListaAsociaciones lista_associaciones = new ListaAsociaciones(50);
-        // lista_associaciones.LlegirFitxer(); falta fer el serializable
+        lista_associaciones.guardarDatos("asociaciones.ser");
         ListaAcciones lista_acciones = new ListaAcciones();
         lista_acciones.LlegirFitxer();
         ListaMiembros lista_miembros = new ListaMiembros();
@@ -57,7 +57,7 @@ public class Main {
                     opcio3(lista_associaciones);
                     break;
                 case 4:
-                    opcio4();
+                    opcio4(lista_acciones);
                     break;
                 case 5:
                     try {
@@ -232,31 +232,28 @@ public class Main {
         }
     }
 
-    public static void opcio4() {
-    System.out.println("Mostrar accions (1. Totes, 2. Charlas, 3. Demostracions)");
-    int filtro = Integer.parseInt(teclat.nextLine());
-
-    String tipoFiltro = "";
-    switch (filtro) {
-        case 1:
-            tipoFiltro = "";  // Mostrar todas
-            break;
-        case 2:
-            tipoFiltro = "charla";
-            break;
-        case 3:
-            tipoFiltro = "demostracion";
-            break;
-        default:
-            System.out.println("Opció no vàlida.");
-            return;
+    public static void opcio4(ListaAcciones listaAcciones) {
+        System.out.println("Mostrar accions (1. Totes, 2. Charlas, 3. Demostracions)");
+        int filtro = Integer.parseInt(teclat.nextLine());
+    
+        String tipoFiltro = "";
+        switch (filtro) {
+            case 1:
+                tipoFiltro = ""; 
+                break;
+            case 2:
+                tipoFiltro = "charla";
+                break;
+            case 3:
+                tipoFiltro = "demostracion";
+                break;
+            default:
+                System.out.println("Opció no vàlida.");
+                return;
+        }
+            ListaAcciones.mostrarAcciones(tipoFiltro);
     }
-
-    // Para llamar a la función mostrarAcciones() debería de ser a una instancia y no a la clase directamente. 
-    //      Ejemplo: lista = new ListaAcciones();
-    //               lista.mostrarAcciones();
-    // ListaAcciones.mostrarAcciones(tipoFiltro);
-}
+    
 
 
 
@@ -265,8 +262,7 @@ public static void opcio5(ListaAsociaciones listaAsociaciones) throws ExcepcionA
     String nombreAsociacion = teclat.nextLine();
 
     Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
-    // Lo mismo que está explicado en la 239
-    // ListaAcciones.mostrarAccionesPorAsociacion(asociacion);
+    ListaAcciones.mostrarAccionesPorAsociacion(asociacion);
 }
 
 
@@ -279,7 +275,6 @@ public static void opcio5(ListaAsociaciones listaAsociaciones) throws ExcepcionA
         String fechaFinStr = teclat.nextLine();
 
         try {
-            // Parseamos las fechas ingresadas por el usuario
             Fecha fechaInicio = Fecha.parse(fechaInicioStr);
             Fecha fechaFin = Fecha.parse(fechaFinStr);
 
@@ -565,9 +560,7 @@ public static void opcio10(ListaAcciones listaAcciones, ListaAsociaciones listaA
 public static void opcio13() {
     System.out.print("Introdueix el nombre mínim d'assistents: ");
     int minAsistentes = Integer.parseInt(teclat.nextLine());
-
-    // Lo mismo que está explicado en la 239
-   //  ListaAcciones.mostrarCharlasConMasAsistentes(minAsistentes);
+   ListaAcciones.mostrarCharlasConMasAsistentes(minAsistentes);
 }
 
     
@@ -591,8 +584,7 @@ public static void opcio13() {
 
 
 public static void opcio15() {
-    // Lo mismo que está explicado en la 239
-    // ListaAcciones.mostrarCharlaMejorValorada();
+    ListaAcciones.mostrarCharlaMejorValorada();
 }
 
     
@@ -682,8 +674,6 @@ public static void opcio16(ListaAcciones listaAcciones, ListaAsociaciones listaA
             System.out.println("S'han eliminat les demostracions no actives dissenyades abans de " + fechaLimite + ".");
         }
     }
-
-
 
     public static void opcio18(ListaAcciones listaAcciones, ListaAsociaciones listaAccionesa, ListaMiembros listaMiembros) {}
 }

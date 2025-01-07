@@ -124,7 +124,7 @@ public class InterficieGrafica extends JFrame {
         acciones.LlegirFitxer();
 
         ListaAsociaciones asociaciones = new ListaAsociaciones(50);
-        asociaciones.LlegirFitxer();
+        asociaciones.guardarDatos();
 
         new InterficieGrafica("Gestor de Demostracions", acciones, asociaciones);
     }
