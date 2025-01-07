@@ -323,7 +323,7 @@ public static void opcio5(ListaAsociaciones listaAsociaciones) throws ExcepcionA
 }
 
 
-    public static void opcio8 (ListaAsociaciones listaAsociaciones) {
+    public static void opcio8 (ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango {
         System.out.print("Introdueix el nom de l'associació: ");
         String nombreAsociacion = teclat.nextLine();
 
@@ -401,16 +401,12 @@ public static void opcio9(ListaAsociaciones listaAsociaciones) {
     System.out.print("Introdueix el nom de l'associació: ");
     String nombreAsociacion = teclat.nextLine();
 
-    try {
-        Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
-        if (asociacion == null) {
-            System.out.println("Associació no trobada.");
-            return;
-        }
-        ListaAcciones.agregarNuevaCharla(asociacion);
-    } catch (ExcepcionAsociacionNoEncontrada e) {
-        System.out.println("Error: " + e.getMessage());
+    Asociacion asociacion = listaAsociaciones.buscarAsociacion(nombreAsociacion);
+    if (asociacion == null) {
+        System.out.println("Associació no trobada.");
+        return;
     }
+    ListaAcciones.agregarNuevaCharla(asociacion);
 }
 
 
@@ -509,7 +505,7 @@ public static void opcio10(ListaAcciones listaAcciones, ListaAsociaciones listaA
     }
 
 
-    public static void opcio12(ListaAsociaciones listaAsociaciones) 
+    public static void opcio12(ListaAsociaciones listaAsociaciones) throws ExcepcionIndiceFueraDeRango 
     {
         Miembro personaMasActiva = null;
         int maxAsociaciones = 0;
