@@ -1,0 +1,5 @@
+jperez;jperez@univ.edu;Profesor;01/01/2020;Informática;101;null
+mgarcia;mgarcia@univ.edu;Alumno;15/02/2021;Ingeniería Industrial;false;null
+alvarez;a.alvarez@univ.edu;Alumno;10/03/2019;Matemáticas;true;20/05/2023
+msanchez;msanchez@univ.edu;Profesor;05/09/2018;Física;203;15/08/2021
+clopez;clopez@univ.edu;Alumno;01/10/2022;Biotecnología;false;null

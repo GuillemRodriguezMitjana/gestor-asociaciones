@@ -10,28 +10,40 @@ public class Alumno extends Miembro {
         super(alias, correo);
         this.setFechaAlta(fechaAlta);
         this.titulacion = titulacion;
-        this.añosEtse = 0;
-        this.graduado = false;
+        this.añosEtse = 0; 
+        this.graduado = false; 
     }
 
+    // Getters
     public String getTitulacion() {
         return titulacion;
-    }
-
-    public void setTitulacion(String titulacion) {
-        this.titulacion = titulacion;
     }
 
     public int getAñosEtse() {
         return añosEtse;
     }
 
-    public void setAñosEtse(int añosEtse) {
-        this.añosEtse = añosEtse;
+    public boolean isGraduado() {
+        return graduado;
     }
 
-    public boolean getGraduado() {
-        return graduado;
+    /**
+     * Devuelve la fecha de baja del alumno.
+     * Este método llama al método heredado de Miembro.
+     * @return Fecha de baja o null si el alumno está activo.
+     */
+    @Override
+    public String getFechaBaja() {
+        return super.getFechaBaja();
+    }
+
+    // Setters
+    public void setTitulacion(String titulacion) {
+        this.titulacion = titulacion;
+    }
+
+    public void setAñosEtse(int añosEtse) {
+        this.añosEtse = añosEtse;
     }
 
     public void setGraduado(boolean graduado) {
