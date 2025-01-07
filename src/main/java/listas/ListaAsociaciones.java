@@ -37,14 +37,15 @@ public class ListaAsociaciones implements Serializable{
         throw new ExcepcionIndiceFueraDeRango("El índice " + index + " está fuera del rango permitido.");
     }
 
-    public Asociacion buscarAsociacion(String nombre) throws ExcepcionAsociacionNoEncontrada{
+    public Asociacion buscarAsociacion(String nombre) {
         for (int i = 0; i < nElem; i++) {
             if (lista[i].getName().equalsIgnoreCase(nombre)) {
                 return lista[i];
             }
         }
-        throw new ExcepcionAsociacionNoEncontrada("La asociación \"" + nombre + "\" no fue encontrada.");
+        return null;
     }
+    
 
     public int getNElem() {
         return nElem;
@@ -62,6 +63,8 @@ public class ListaAsociaciones implements Serializable{
         resultado += "]";
         return resultado;
     }
+    
+
 
     // Métodos añadidos por tu compañero
     public void mostrarAssociacions() {

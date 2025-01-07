@@ -36,7 +36,7 @@ public class Main {
         ListaAcciones lista_acciones = new ListaAcciones();
         lista_acciones.LlegirFitxer();
         ListaMiembros lista_miembros = new ListaMiembros();
-        // lista_miembros.LlegitFitxer(); falta fer funcio
+        lista_miembros.LlegirFitxer();
 
 
         // falta cargar datos desde ficheros

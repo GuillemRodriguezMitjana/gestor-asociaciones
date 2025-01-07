@@ -27,7 +27,7 @@ public class ListaMiembros {
         }
         return false;
     }
-
+    
     public Miembro obtenerMiembro(int index) {
         if (index >= 0 && index < nElem) {
             return lista[index];
